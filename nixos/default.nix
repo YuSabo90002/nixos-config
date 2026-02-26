@@ -1,10 +1,14 @@
 {
-  inputs,
+  flake,
   lib,
   config,
   pkgs,
   ...
-}: {
+}:
+let
+  inherit (flake) inputs;
+in
+{
   imports = [
     inputs.disko.nixosModules.disko
     inputs.agenix.nixosModules.default
@@ -24,7 +28,7 @@
       nix-path = config.nix.nixPath;
     };
     channel.enable = false;
-    registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+    registry = lib.mapAttrs (_: v: { flake = v; }) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
