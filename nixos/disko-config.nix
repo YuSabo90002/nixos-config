@@ -46,6 +46,24 @@
           };
         };
       };
+      games = {
+        type = "disk";
+        device = "/dev/nvme1n1";
+        content = {
+          type = "gpt";
+          partitions = {
+            games = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "btrfs";
+                mountpoint = "/home/yuta/Games";
+                mountOptions = [ "compress=zstd" "noatime" ];
+              };
+            };
+          };
+        };
+      };
     };
   };
 }

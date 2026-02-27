@@ -19,12 +19,16 @@
     wl-clipboard
     swww
     unstable.claude-code
+    unstable.discord
   ];
 
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      monitor = [ ",preferred,auto,1" ];
+      monitor = [
+        "DP-3,2560x1440@60,0x0,1"
+        "DP-2,1920x1080@60,2560x0,1"
+      ];
       "$mod" = "SUPER";
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
@@ -80,10 +84,6 @@
         DefaultIM=skk
 
         [Groups/0/Items/0]
-        Name=keyboard-us
-        Layout=
-
-        [Groups/0/Items/1]
         Name=skk
         Layout=
 

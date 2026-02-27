@@ -10,10 +10,16 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember-session --cmd Hyprland";
         user = "greeter";
       };
     };
+  };
+
+  programs.steam = {
+    enable = true;
+    dedicatedServer.openFirewall = true;
+    remotePlay.openFirewall = true;
   };
 
   # AMD GPU
