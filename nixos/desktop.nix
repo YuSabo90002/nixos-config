@@ -1,5 +1,10 @@
 { pkgs, ... }: {
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
+
+  programs.uwsm.enable = true;
 
   services.greetd = {
     enable = true;

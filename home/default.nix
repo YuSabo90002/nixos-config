@@ -18,6 +18,7 @@
     slurp
     wl-clipboard
     swww
+    unstable.claude-code
   ];
 
   wayland.windowManager.hyprland = {
@@ -30,6 +31,7 @@
       exec-once = [
         "waybar"
         "dunst"
+        "fcitx5"
       ];
       bind = [
         "$mod, Return, exec, $terminal"
@@ -68,7 +70,36 @@
     };
   };
 
-  programs.git.enable = true;
+  xdg.configFile = {
+    "fcitx5/profile" = {
+      force = true;
+      text = ''
+        [Groups/0]
+        Name=Default
+        Default Layout=us
+        DefaultIM=skk
+
+        [Groups/0/Items/0]
+        Name=keyboard-us
+        Layout=
+
+        [Groups/0/Items/1]
+        Name=skk
+        Layout=
+
+        [GroupOrder]
+        0=Default
+      '';
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    settings ={
+      user.Name = "yuta";
+      user.email = "yusabo90002@gmail.com";  
+    };
+  };
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 }
