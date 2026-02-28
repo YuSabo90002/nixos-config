@@ -100,6 +100,11 @@
         follow_mouse = 1;
         sensitivity = 0;
         accel_profile = "flat";
+
+      # トラックボールの速度設定
+      device = {
+        name = "kensington-expert-mouse";
+        sensitivity = 0.8;
       };
 
       # その他
