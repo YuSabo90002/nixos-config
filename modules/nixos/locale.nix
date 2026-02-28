@@ -29,13 +29,15 @@
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
       noto-fonts-color-emoji
+      nerd-fonts.jetbrains-mono
+      hackgen-nf-font
       font-awesome
     ];
     fontconfig = {
       defaultFonts = {
         serif = [ "Noto Serif CJK JP" ];
         sansSerif = [ "Noto Sans CJK JP" ];
-        monospace = [ "Noto Sans Mono CJK JP" ];
+        monospace = [ "JetBrainsMono Nerd Font" "HackGen Console NF" ];
       };
     };
   };

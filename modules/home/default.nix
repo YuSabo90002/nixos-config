@@ -17,7 +17,6 @@
     slurp
     wl-clipboard
     swww
-    nerd-fonts.jetbrains-mono
     unstable.claude-code
     unstable.discord
   ];
