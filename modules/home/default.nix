@@ -33,7 +33,7 @@
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
 
-      exec-once = [ "waybar" "dunst" "swww-daemon" ];
+      exec-once = [ "waybar" "dunst" "swww-daemon" "swww img ~/Pictures/wallpaper.jpg" ];
 
       # Monokai配色 + Dwindleレイアウト
       general = {
@@ -262,6 +262,10 @@
       }
     '';
   };
+
+
+  # 壁紙
+  home.file."Pictures/wallpaper.jpg".source = /home/yuta/Pictures/84375664_p0.jpg;
 
   # steamwebhelperがDRI_PRIME=1でクラッシュする問題の回避
   # https://github.com/ValveSoftware/steam-for-linux/issues/9383
