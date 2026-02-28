@@ -100,6 +100,8 @@
         follow_mouse = 1;
         sensitivity = 0;
         accel_profile = "flat";
+        numlock_by_default = false;
+      };
 
       # トラックボールの速度設定
       device = {
