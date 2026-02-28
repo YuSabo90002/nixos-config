@@ -337,7 +337,7 @@ in {
   programs.ags = {
     enable = true;
     configDir = ../../ags;
-    extraPackages = with inputs.astal.packages.${pkgs.system}; [
+    extraPackages = with inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}; [
       hyprland
       wireplumber
       mpris
