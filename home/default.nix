@@ -36,7 +36,6 @@
       exec-once = [
         "waybar"
         "dunst"
-        "fcitx5"
       ];
       bind = [
         "$mod, Return, exec, $terminal"
@@ -103,6 +102,10 @@
         [Groups/0/Items/0]
         Name=skk
         Layout=
+
+        [Groups/0/Items/1]
+        Name=
+        Layout=us
 
         [GroupOrder]
         0=Default
