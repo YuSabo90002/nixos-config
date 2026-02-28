@@ -1,12 +1,5 @@
 import { Gtk } from "ags/gtk4"
-import Hyprland from "gi://AstalHyprland"
-
-function exec(cmd: string) {
-  const proc = Gtk.init ? import("gi://Gio") : null
-  import("gi://Gio").then((Gio) => {
-    Gio.Subprocess.new(["bash", "-c", cmd], 0)
-  })
-}
+import { execAsync } from "ags/process"
 
 export default function PowerMenu() {
   return (
@@ -41,9 +34,7 @@ export default function PowerMenu() {
 
           row.connect("clicked", () => {
             popover.popdown()
-            import("gi://Gio").then((Gio) => {
-              Gio.Subprocess.new(["bash", "-c", item.cmd], 0)
-            })
+            execAsync(item.cmd).catch((err) => console.error(err))
           })
 
           box.append(row)
