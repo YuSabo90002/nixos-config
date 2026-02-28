@@ -91,6 +91,13 @@
   };
 
   xdg.configFile = {
+    "fcitx5/config" = {
+      force = true;
+      text = ''
+        [Hotkey/TriggerKeys]
+        0=Control+Shift+T
+      '';
+    };
     "fcitx5/profile" = {
       force = true;
       text = ''
