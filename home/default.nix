@@ -24,6 +24,7 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
+    systemd.enable = false; # UWSMが管理するため無効化
     settings = {
       monitor = [
         "DP-3,2560x1440@60,0x0,1"
@@ -71,7 +72,23 @@
       input = {
         kb_layout = "us";
       };
+      misc = {
+        focus_on_activate = true;
+      };
     };
+  };
+
+  # steamwebhelperがDRI_PRIME=1でクラッシュする問題の回避
+  # https://github.com/ValveSoftware/steam-for-linux/issues/9383
+  xdg.desktopEntries.steam = {
+    name = "Steam";
+    comment = "Application for managing and playing games on Steam";
+    exec = "steam %U";
+    icon = "steam";
+    terminal = false;
+    type = "Application";
+    categories = [ "Network" "FileTransfer" "Game" ];
+    mimeType = [ "x-scheme-handler/steam" "x-scheme-handler/steamlink" ];
   };
 
   xdg.configFile = {
