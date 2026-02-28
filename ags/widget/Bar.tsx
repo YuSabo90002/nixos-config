@@ -4,9 +4,8 @@ import Clock from "./bar/Clock"
 import MediaPlayer from "./bar/MediaPlayer"
 import SysTray from "./bar/SysTray"
 import Volume from "./bar/Volume"
-import NetworkIndicator from "./bar/NetworkIndicator"
 import SystemMonitor from "./bar/SystemMonitor"
-import PowerProfile from "./bar/PowerProfile"
+
 import NotificationCenter from "./bar/NotificationCenter"
 
 export default function Bar(monitor: number) {
@@ -34,9 +33,7 @@ export default function Bar(monitor: number) {
         <box hexpand halign={Gtk.Align.END}>
           <SysTray />
           <Volume />
-          <NetworkIndicator />
           <SystemMonitor />
-          <PowerProfile />
           <NotificationCenter />
         </box>
       </box>

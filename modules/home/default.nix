@@ -340,11 +340,9 @@ in {
     extraPackages = with inputs.astal.packages.${pkgs.system}; [
       hyprland
       wireplumber
-      network
       mpris
       notifd
       tray
-      powerprofiles
     ];
   };
 
