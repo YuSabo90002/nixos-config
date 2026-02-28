@@ -1,5 +1,5 @@
 import { Astal, Gtk } from "ags/gtk4"
-import { createBinding } from "ags"
+import { createBinding, For } from "ags"
 import Notifd from "gi://AstalNotifd"
 
 function Notification({ notification }: { notification: Notifd.Notification }) {
@@ -63,9 +63,9 @@ export default function NotificationPopups() {
       visible={notifications((n) => n.length > 0)}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
-        {notifications((notifs) =>
-          notifs.slice(0, 5).map((n) => <Notification notification={n} />),
-        )}
+        <For each={notifications}>
+          {(n) => <Notification notification={n} />}
+        </For>
       </box>
     </window>
   )

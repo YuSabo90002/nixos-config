@@ -10,14 +10,14 @@ $blue: #66D9EF;
 $magenta: #AE81FF;
 $cyan: #A1EFE4;
 $orange: #FD971F;
-$bar-bg: alpha($bg, 0.92);
+$bar-bg: rgba(39, 40, 34, 0.92);
 $radius: 10px;
 
 window.Bar {
-  background: transparent;
+  background-color: transparent;
 
-  > centerbox {
-    background: $bar-bg;
+  > box {
+    background-color: $bar-bg;
     border-radius: $radius;
     margin: 5px 10px 0;
     padding: 0 8px;
@@ -30,24 +30,23 @@ window.Bar {
   button {
     min-width: 8px;
     min-height: 8px;
-    border-radius: 50%;
-    background: $fg-dim;
+    border-radius: 999px;
+    background-color: $fg-dim;
     margin: 0 3px;
     padding: 0;
-    transition: all 200ms ease;
 
     &.focused {
-      background: $green;
+      background-color: $green;
       min-width: 20px;
       border-radius: 4px;
     }
 
     &.occupied {
-      background: $blue;
+      background-color: $blue;
     }
 
     &.focused.occupied {
-      background: $green;
+      background-color: $green;
     }
   }
 }
@@ -65,7 +64,7 @@ window.Bar {
   padding: 0 8px;
 
   button {
-    background: transparent;
+    background-color: transparent;
     color: $cyan;
     padding: 0 8px;
 
@@ -83,12 +82,12 @@ window.Bar {
     padding: 0 4px;
 
     button {
-      background: transparent;
+      background-color: transparent;
       padding: 4px;
       border-radius: 6px;
 
       &:hover {
-        background: $bg-light;
+        background-color: $bg-light;
       }
     }
   }
@@ -96,13 +95,13 @@ window.Bar {
 
 // 音量
 .Volume {
-  background: transparent;
+  background-color: transparent;
   color: $blue;
   padding: 0 6px;
   border-radius: 6px;
 
   &:hover {
-    background: $bg-light;
+    background-color: $bg-light;
   }
 
   &.muted {
@@ -138,12 +137,12 @@ window.Bar {
 
 // 電力プロファイル
 .PowerProfile {
-  background: transparent;
+  background-color: transparent;
   padding: 0 6px;
   border-radius: 6px;
 
   &:hover {
-    background: $bg-light;
+    background-color: $bg-light;
   }
 
   &.performance {
@@ -161,13 +160,13 @@ window.Bar {
 
 // 通知センター
 .NotificationCenter {
-  background: transparent;
+  background-color: transparent;
   color: $fg;
   padding: 0 6px;
   border-radius: 6px;
 
   &:hover {
-    background: $bg-light;
+    background-color: $bg-light;
   }
 
   .count {
@@ -179,11 +178,11 @@ window.Bar {
 
 // 通知ポップアップ
 window.NotificationPopups {
-  background: transparent;
+  background-color: transparent;
 }
 
 .notification-popup {
-  background: $bar-bg;
+  background-color: $bar-bg;
   border-radius: $radius;
   border: 1px solid $bg-light;
   margin: 4px 10px;
@@ -197,15 +196,15 @@ window.NotificationPopups {
     }
 
     .close {
-      background: transparent;
+      background-color: transparent;
       color: $fg-dim;
       min-width: 24px;
       min-height: 24px;
-      border-radius: 50%;
+      border-radius: 999px;
       padding: 0;
 
       &:hover {
-        background: $bg-light;
+        background-color: $bg-light;
         color: $red;
       }
     }
@@ -223,14 +222,14 @@ window.NotificationPopups {
   }
 
   .notification-actions button {
-    background: $bg-light;
+    background-color: $bg-light;
     color: $fg;
     border-radius: 6px;
     padding: 4px 12px;
     margin: 2px;
 
     &:hover {
-      background: $blue;
+      background-color: $blue;
       color: $bg;
     }
   }

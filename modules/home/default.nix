@@ -27,6 +27,7 @@ in {
     swww
     unstable.claude-code
     unstable.discord
+    pavucontrol
   ];
 
   wayland.windowManager.hyprland = {

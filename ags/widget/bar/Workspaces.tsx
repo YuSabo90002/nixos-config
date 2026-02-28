@@ -1,4 +1,4 @@
-import { createBinding } from "ags"
+import { createBinding, For } from "ags"
 import Hyprland from "gi://AstalHyprland"
 
 export default function Workspaces() {
@@ -6,26 +6,18 @@ export default function Workspaces() {
   const workspaces = createBinding(hyprland, "workspaces")
   const focused = createBinding(hyprland, "focusedWorkspace")
 
+  const ids = Array.from({ length: 10 }, (_, i) => i + 1)
+
   return (
     <box cssClasses={["Workspaces"]}>
-      {workspaces((wss) => {
-        const ids = Array.from({ length: 10 }, (_, i) => i + 1)
-        const occupiedIds = new Set(
-          wss
-            .filter((ws) => !(ws.id >= -99 && ws.id <= -2))
-            .map((ws) => ws.id),
-        )
-
-        return ids.map((id) => (
-          <button
-            cssClasses={focused((fw) => [
-              ...(fw?.id === id ? ["focused"] : []),
-              ...(occupiedIds.has(id) ? ["occupied"] : []),
-            ])}
-            onClicked={() => hyprland.dispatch("workspace", String(id))}
-          />
-        ))
-      })}
+      {ids.map((id) => (
+        <button
+          cssClasses={focused((fw) => [
+            ...(fw?.id === id ? ["focused"] : []),
+          ])}
+          onClicked={() => hyprland.dispatch("workspace", String(id))}
+        />
+      ))}
     </box>
   )
 }

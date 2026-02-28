@@ -1,4 +1,4 @@
-import { createBinding } from "ags"
+import { createBinding, For } from "ags"
 import Tray from "gi://AstalTray"
 
 export default function SysTray() {
@@ -7,8 +7,8 @@ export default function SysTray() {
 
   return (
     <box cssClasses={["SysTray"]}>
-      {items((list) =>
-        list.map((item) => (
+      <For each={items}>
+        {(item) => (
           <menubutton
             cssClasses={["tray-item"]}
             tooltipMarkup={createBinding(item, "tooltipMarkup")}
@@ -22,8 +22,8 @@ export default function SysTray() {
           >
             <image gicon={createBinding(item, "gicon")} />
           </menubutton>
-        )),
-      )}
+        )}
+      </For>
     </box>
   )
 }

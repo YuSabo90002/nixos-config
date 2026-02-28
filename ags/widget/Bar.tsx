@@ -21,7 +21,7 @@ export default function Bar(monitor: number) {
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       cssClasses={["Bar"]}
     >
-      <centerbox>
+      <box>
         <box hexpand halign={Gtk.Align.START}>
           <Workspaces />
         </box>
@@ -39,7 +39,7 @@ export default function Bar(monitor: number) {
           <PowerProfile />
           <NotificationCenter />
         </box>
-      </centerbox>
+      </box>
     </window>
   )
 }
