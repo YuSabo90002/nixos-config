@@ -220,6 +220,13 @@ window.Bar .Workspaces {
   }
 }
 
+// ネットワーク
+.Network {
+  color: $cyan;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
 // 通知センター
 .NotificationCenter {
   background-color: transparent;

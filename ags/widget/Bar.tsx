@@ -6,6 +6,7 @@ import SysTray from "./bar/SysTray"
 import Volume from "./bar/Volume"
 import SystemMonitor from "./bar/SystemMonitor"
 import NotificationCenter from "./bar/NotificationCenter"
+import NetworkIndicator from "./bar/NetworkIndicator"
 import PowerMenu from "./bar/PowerMenu"
 
 export default function Bar(monitor: number) {
@@ -34,6 +35,7 @@ export default function Bar(monitor: number) {
           <SystemMonitor />
           <SysTray />
           <Volume />
+          <NetworkIndicator />
           <NotificationCenter />
           <PowerMenu />
         </box>
