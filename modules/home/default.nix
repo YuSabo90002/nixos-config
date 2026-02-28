@@ -391,7 +391,7 @@ in {
       window = {
         padding = { x = 8; y = 8; };
         dynamic_padding = true;
-        opacity = 0.93;
+        opacity = 0.85;
       };
       font = {
         normal = { family = "JetBrainsMono Nerd Font"; style = "Regular"; };
