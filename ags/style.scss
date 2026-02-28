@@ -1,0 +1,237 @@
+// Monokai 配色
+$bg: #272822;
+$bg-light: #3E3D32;
+$fg: #F8F8F2;
+$fg-dim: #75715E;
+$red: #F92672;
+$green: #A6E22E;
+$yellow: #F4BF75;
+$blue: #66D9EF;
+$magenta: #AE81FF;
+$cyan: #A1EFE4;
+$orange: #FD971F;
+$bar-bg: alpha($bg, 0.92);
+$radius: 10px;
+
+window.Bar {
+  background: transparent;
+
+  > centerbox {
+    background: $bar-bg;
+    border-radius: $radius;
+    margin: 5px 10px 0;
+    padding: 0 8px;
+    min-height: 36px;
+  }
+}
+
+// ワークスペース
+.Workspaces {
+  button {
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    background: $fg-dim;
+    margin: 0 3px;
+    padding: 0;
+    transition: all 200ms ease;
+
+    &.focused {
+      background: $green;
+      min-width: 20px;
+      border-radius: 4px;
+    }
+
+    &.occupied {
+      background: $blue;
+    }
+
+    &.focused.occupied {
+      background: $green;
+    }
+  }
+}
+
+// 時計
+.Clock {
+  color: $fg;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 12px;
+}
+
+// メディアプレーヤー
+.Media {
+  padding: 0 8px;
+
+  button {
+    background: transparent;
+    color: $cyan;
+    padding: 0 8px;
+
+    &:hover {
+      color: $green;
+    }
+  }
+}
+
+// システムトレイ
+.SysTray {
+  padding: 0 4px;
+
+  menubutton {
+    padding: 0 4px;
+
+    button {
+      background: transparent;
+      padding: 4px;
+      border-radius: 6px;
+
+      &:hover {
+        background: $bg-light;
+      }
+    }
+  }
+}
+
+// 音量
+.Volume {
+  background: transparent;
+  color: $blue;
+  padding: 0 6px;
+  border-radius: 6px;
+
+  &:hover {
+    background: $bg-light;
+  }
+
+  &.muted {
+    color: $fg-dim;
+  }
+}
+
+// ネットワーク
+.Network {
+  color: $cyan;
+  padding: 0 6px;
+}
+
+// システムモニター
+.SystemMonitor {
+  padding: 0 8px;
+  color: $fg-dim;
+  font-size: 12px;
+
+  .cpu {
+    color: $green;
+  }
+
+  .mem {
+    color: $yellow;
+  }
+
+  .separator {
+    color: $fg-dim;
+    padding: 0 4px;
+  }
+}
+
+// 電力プロファイル
+.PowerProfile {
+  background: transparent;
+  padding: 0 6px;
+  border-radius: 6px;
+
+  &:hover {
+    background: $bg-light;
+  }
+
+  &.performance {
+    color: $red;
+  }
+
+  &.balanced {
+    color: $green;
+  }
+
+  &.power-saver {
+    color: $yellow;
+  }
+}
+
+// 通知センター
+.NotificationCenter {
+  background: transparent;
+  color: $fg;
+  padding: 0 6px;
+  border-radius: 6px;
+
+  &:hover {
+    background: $bg-light;
+  }
+
+  .count {
+    color: $orange;
+    font-size: 11px;
+    font-weight: bold;
+  }
+}
+
+// 通知ポップアップ
+window.NotificationPopups {
+  background: transparent;
+}
+
+.notification-popup {
+  background: $bar-bg;
+  border-radius: $radius;
+  border: 1px solid $bg-light;
+  margin: 4px 10px;
+  padding: 10px 14px;
+  min-width: 300px;
+
+  .notification-header {
+    .app-name {
+      color: $fg-dim;
+      font-size: 11px;
+    }
+
+    .close {
+      background: transparent;
+      color: $fg-dim;
+      min-width: 24px;
+      min-height: 24px;
+      border-radius: 50%;
+      padding: 0;
+
+      &:hover {
+        background: $bg-light;
+        color: $red;
+      }
+    }
+  }
+
+  .summary {
+    color: $fg;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .body {
+    color: $fg-dim;
+    font-size: 13px;
+  }
+
+  .notification-actions button {
+    background: $bg-light;
+    color: $fg;
+    border-radius: 6px;
+    padding: 4px 12px;
+    margin: 2px;
+
+    &:hover {
+      background: $blue;
+      color: $bg;
+    }
+  }
+}

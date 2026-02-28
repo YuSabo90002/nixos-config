@@ -7,6 +7,7 @@ let
 in {
   imports = [
     inputs.nixvim.homeModules.default
+    inputs.ags.homeManagerModules.default
   ];
   home = {
     username = "yuta";
@@ -20,8 +21,6 @@ in {
     fd
     btop
     wofi
-    waybar
-    dunst
     grim
     slurp
     wl-clipboard
@@ -42,7 +41,7 @@ in {
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
 
-      exec-once = [ "waybar" "dunst" "swww-daemon" "swww img ${wallpaper}" ];
+      exec-once = [ "ags run" "swww-daemon" "swww img ${wallpaper}" ];
 
       # Monokai配色 + Dwindleレイアウト
       general = {
@@ -332,6 +331,20 @@ in {
         0=Default
       '';
     };
+  };
+
+  programs.ags = {
+    enable = true;
+    configDir = ../../ags;
+    extraPackages = with inputs.astal.packages.${pkgs.system}; [
+      hyprland
+      wireplumber
+      network
+      mpris
+      notifd
+      tray
+      powerprofiles
+    ];
   };
 
   programs.nushell = {
