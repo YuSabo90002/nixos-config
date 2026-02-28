@@ -27,7 +27,7 @@
     systemd.enable = false; # UWSMが管理するため無効化
     settings = {
       monitor = [
-        "DP-3,2560x1440@60,0x0,1"
+        "DP-1,2560x1440@60,0x0,1"
         "DP-2,1920x1080@60,2560x0,1"
       ];
       "$mod" = "SUPER";

@@ -9,15 +9,31 @@ let
   inherit (flake) inputs;
 in
 {
+  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (final: _prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        system = final.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      };
+    })
+  ];
+
   imports = [
     inputs.disko.nixosModules.disko
     inputs.agenix.nixosModules.default
-    ./disko-config.nix
-    ./hardware-configuration.nix
-    ./locale.nix
-    ./networking.nix
-    ./desktop.nix
+    ../../modules/nixos/disko-config.nix
+    ../../modules/nixos/hardware-configuration.nix
+    ../../modules/nixos/locale.nix
+    ../../modules/nixos/networking.nix
+    ../../modules/nixos/desktop.nix
   ];
+
+  # home-manager
+  home-manager.users.yuta = {
+    imports = [ flake.self.homeModules.default ];
+  };
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -42,7 +58,7 @@ in
   ];
   age.secrets = {
     yuta-password = {
-      file = ../secrets/yuta-password.age;
+      file = ../../secrets/yuta-password.age;
     };
   };
 

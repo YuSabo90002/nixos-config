@@ -24,39 +24,9 @@
     };
   };
 
-  outputs = inputs@{ self, ... }:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
-      imports = [ inputs.nixos-unified.flakeModules.default ];
-
-      flake = let
-        myUserName = "yuta";
-      in {
-        nixosConfigurations."Yuta-PC" =
-          self.nixos-unified.lib.mkLinuxSystem
-            { home-manager = true; }
-            {
-              nixpkgs.hostPlatform = "x86_64-linux";
-              nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays = [
-                (final: _prev: {
-                  unstable = import inputs.nixpkgs-unstable {
-                    system = final.stdenv.hostPlatform.system;
-                    config.allowUnfree = true;
-                  };
-                })
-              ];
-              imports = [
-                ./nixos
-                {
-                  home-manager.users.${myUserName} = {
-                    imports = [ self.homeModules.default ];
-                  };
-                }
-              ];
-            };
-
-        homeModules.default = import ./home;
-      };
+  outputs = inputs:
+    inputs.nixos-unified.lib.mkFlake {
+      inherit inputs;
+      root = ./.;
     };
 }
