@@ -10,7 +10,6 @@
     ripgrep
     fd
     btop
-    alacritty
     wofi
     waybar
     dunst
@@ -18,6 +17,7 @@
     slurp
     wl-clipboard
     swww
+    nerd-fonts.jetbrains-mono
     unstable.claude-code
     unstable.discord
   ];
@@ -261,11 +261,6 @@
         float = true
         pin = true
       }
-      windowrule {
-        name = alacritty-opacity
-        match:class = Alacritty
-        opacity = 0.95 0.88
-      }
     '';
   };
 
@@ -309,6 +304,94 @@
         [GroupOrder]
         0=Default
       '';
+    };
+  };
+
+  programs.nushell = {
+    enable = true;
+    settings = {
+      show_banner = false;
+      completions = {
+        algorithm = "prefix";
+        case_sensitive = false;
+        quick = true;
+        partial = true;
+      };
+    };
+    shellAliases = {
+      ll = "ls -l";
+      la = "ls -a";
+      lla = "ls -la";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+      format = "$directory$git_branch$git_status$character";
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[✗](bold red)";
+      };
+      directory = {
+        truncation_length = 3;
+        style = "bold cyan";
+      };
+      git_branch = {
+        style = "bold purple";
+      };
+    };
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      terminal.shell = {
+        program = "${pkgs.nushell}/bin/nu";
+      };
+      window = {
+        padding = { x = 8; y = 8; };
+        dynamic_padding = true;
+        opacity = 0.93;
+      };
+      font = {
+        normal = { family = "JetBrainsMono Nerd Font"; style = "Regular"; };
+        bold = { family = "JetBrainsMono Nerd Font"; style = "Bold"; };
+        size = 13.0;
+      };
+      cursor = {
+        style = { shape = "Block"; blinking = "On"; };
+        blink_interval = 500;
+      };
+      scrolling = {
+        history = 10000;
+      };
+      colors = {
+        primary = {
+          background = "#272822";
+          foreground = "#F8F8F2";
+        };
+        normal = {
+          black   = "#272822";
+          red     = "#F92672";
+          green   = "#A6E22E";
+          yellow  = "#F4BF75";
+          blue    = "#66D9EF";
+          magenta = "#AE81FF";
+          cyan    = "#A1EFE4";
+          white   = "#F8F8F2";
+        };
+        bright = {
+          black   = "#75715E";
+          red     = "#F92672";
+          green   = "#A6E22E";
+          yellow  = "#F4BF75";
+          blue    = "#66D9EF";
+          magenta = "#AE81FF";
+          cyan    = "#A1EFE4";
+          white   = "#F9F8F5";
+        };
+      };
     };
   };
 
