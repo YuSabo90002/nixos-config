@@ -31,6 +31,9 @@ in
   ];
 
   # home-manager
+  home-manager.extraSpecialArgs = {
+    inherit inputs;
+  };
   home-manager.users.yuta = {
     imports = [ flake.self.homeModules.default ];
   };
@@ -73,7 +76,6 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    vim
     git
     wget
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default

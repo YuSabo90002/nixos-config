@@ -1,4 +1,7 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
+  imports = [
+    inputs.nixvim.homeModules.default
+  ];
   home = {
     username = "yuta";
     homeDirectory = "/home/yuta";
@@ -282,7 +285,7 @@
   };
 
   # 壁紙
-  home.file."Pictures/wallpaper.jpg".source = /home/yuta/Pictures/84375664_p0.jpg;
+  home.file."Pictures/wallpaper.jpg".source = ../../assets/wallpaper.jpg;
 
   # steamwebhelperがDRI_PRIME=1でクラッシュする問題の回避
   # https://github.com/ValveSoftware/steam-for-linux/issues/9383
@@ -415,11 +418,24 @@
     };
   };
 
+  programs.nixvim = {
+    enable = true;
+    defaultEditor = true;
+    opts = {
+      number = true;
+      relativenumber = true;
+      shiftwidth = 2;
+      tabstop = 2;
+      expandtab = true;
+    };
+  };
+
   programs.git = {
     enable = true;
-    settings ={
+    settings = {
       user.Name = "yuta";
-      user.email = "yusabo90002@gmail.com";  
+      user.email = "yusabo90002@gmail.com";
+      core.editor = "nvim";
     };
   };
   programs.home-manager.enable = true;
