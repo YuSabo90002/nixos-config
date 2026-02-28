@@ -270,6 +270,16 @@
     '';
   };
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+    documents = "$HOME/Documents";
+    download = "$HOME/Downloads";
+    pictures = "$HOME/Pictures";
+    videos = "$HOME/Videos";
+    music = "$HOME/Music";
+    desktop = "$HOME/Desktop";
+  };
 
   # 壁紙
   home.file."Pictures/wallpaper.jpg".source = /home/yuta/Pictures/84375664_p0.jpg;
