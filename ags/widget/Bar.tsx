@@ -31,9 +31,9 @@ export default function Bar(monitor: number) {
         </box>
 
         <box hexpand halign={Gtk.Align.END}>
+          <SystemMonitor />
           <SysTray />
           <Volume />
-          <SystemMonitor />
           <NotificationCenter />
           <PowerMenu />
         </box>

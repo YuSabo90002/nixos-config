@@ -163,20 +163,60 @@ window.Bar .Workspaces {
 // システムモニター
 .SystemMonitor {
   padding: 0 8px;
-  color: $fg-dim;
   font-size: 12px;
 
-  .cpu {
+  .icon {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 14px;
+    padding-right: 4px;
+  }
+
+  .cpu-icon {
     color: $green;
   }
 
-  .mem {
+  .mem-icon {
     color: $yellow;
+  }
+
+  .spark {
+    font-size: 11px;
+    padding: 0 2px;
+
+    &.normal {
+      color: $green;
+    }
+
+    &.warning {
+      color: $yellow;
+    }
+
+    &.critical {
+      color: $red;
+    }
+  }
+
+  .percent {
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 28px;
+
+    &.normal {
+      color: $green;
+    }
+
+    &.warning {
+      color: $yellow;
+    }
+
+    &.critical {
+      color: $red;
+    }
   }
 
   .separator {
     color: $fg-dim;
-    padding: 0 4px;
+    padding: 0 1px;
   }
 }
 
