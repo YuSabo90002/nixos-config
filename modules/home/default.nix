@@ -1,4 +1,10 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+let
+  wallpaper = builtins.fetchurl {
+    url = "https://w.wallhaven.cc/full/21/wallhaven-21deem.jpg";
+    sha256 = "048xy6qarfkya07r1a7s36913z71l9hxr45al3qcym1ql9jrkrqv";
+  };
+in {
   imports = [
     inputs.nixvim.homeModules.default
   ];
@@ -36,7 +42,7 @@
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
 
-      exec-once = [ "waybar" "dunst" "swww-daemon" "swww img ~/Pictures/wallpaper.jpg" ];
+      exec-once = [ "waybar" "dunst" "swww-daemon" "swww img ${wallpaper}" ];
 
       # Monokai配色 + Dwindleレイアウト
       general = {
@@ -284,8 +290,6 @@
     desktop = "$HOME/Desktop";
   };
 
-  # 壁紙
-  home.file."Pictures/wallpaper.jpg".source = ../../assets/wallpaper.jpg;
 
   # steamwebhelperがDRI_PRIME=1でクラッシュする問題の回避
   # https://github.com/ValveSoftware/steam-for-linux/issues/9383
