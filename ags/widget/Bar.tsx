@@ -5,8 +5,8 @@ import MediaPlayer from "./bar/MediaPlayer"
 import SysTray from "./bar/SysTray"
 import Volume from "./bar/Volume"
 import SystemMonitor from "./bar/SystemMonitor"
-
 import NotificationCenter from "./bar/NotificationCenter"
+import PowerMenu from "./bar/PowerMenu"
 
 export default function Bar(monitor: number) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
@@ -35,6 +35,7 @@ export default function Bar(monitor: number) {
           <Volume />
           <SystemMonitor />
           <NotificationCenter />
+          <PowerMenu />
         </box>
       </box>
     </window>
