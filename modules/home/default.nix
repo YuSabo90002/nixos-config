@@ -444,6 +444,12 @@ in {
       tabstop = 2;
       expandtab = true;
     };
+    highlightOverride = {
+      Normal = { bg = "none"; };
+      NonText = { bg = "none"; };
+      SignColumn = { bg = "none"; };
+      LineNr = { bg = "none"; };
+    };
   };
 
   programs.git = {
