@@ -28,6 +28,10 @@ in {
     unstable.claude-code
     unstable.discord
     pavucontrol
+    winboat
+    unstable.gh
+    unstable.uv
+    unstable.volta
   ];
 
   wayland.windowManager.hyprland = {
@@ -479,6 +483,16 @@ in {
       NonText = { bg = "none"; };
       SignColumn = { bg = "none"; };
       LineNr = { bg = "none"; };
+    };
+  };
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.unstable.vscode;
+    profiles.default = {
+      extensions = with pkgs.unstable.vscode-extensions; [
+        ms-ceintl.vscode-language-pack-ja
+      ];
     };
   };
 
