@@ -6,10 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Rebuild and switch to new configuration
-sudo nixos-rebuild switch --flake .
-
-# Build without switching (test build)
-sudo nixos-rebuild build --flake .
+nix run .#activate
 
 # Update all flake inputs
 nix flake update

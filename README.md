@@ -46,10 +46,7 @@ flake.nix
 
 ```bash
 # ビルド & 適用
-sudo nixos-rebuild switch --flake .
-
-# ビルドのみ（テスト）
-sudo nixos-rebuild build --flake .
+nix run .#activate
 
 # flake inputs 更新
 nix flake update
