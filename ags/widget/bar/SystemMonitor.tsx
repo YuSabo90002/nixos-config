@@ -54,17 +54,18 @@ function colorClass(value: number): string {
   return "normal"
 }
 
-export default function SystemMonitor() {
-  const poll = createPoll("", 2000, () => {
-    const cpu = getCpuUsage()
-    const mem = getMemUsage()
-    cpuHistory.shift()
-    cpuHistory.push(cpu)
-    memHistory.shift()
-    memHistory.push(mem)
-    return JSON.stringify({ cpu, mem })
-  })
+// モジュールレベルで単一の poll を作成し、全モニターで共有する
+const poll = createPoll("", 2000, () => {
+  const cpu = getCpuUsage()
+  const mem = getMemUsage()
+  cpuHistory.shift()
+  cpuHistory.push(cpu)
+  memHistory.shift()
+  memHistory.push(mem)
+  return JSON.stringify({ cpu, mem })
+})
 
+export default function SystemMonitor() {
   return (
     <box cssClasses={["SystemMonitor"]} spacing={4} tooltipText={poll((v) => {
       try {
@@ -80,7 +81,6 @@ export default function SystemMonitor() {
         } catch { return ["spark", "cpu"] }
       })} label={poll((v) => {
         try {
-          const { cpu } = JSON.parse(v || '{"cpu":0}')
           return toSparkline(cpuHistory)
         } catch { return "" }
       })} />
@@ -104,7 +104,6 @@ export default function SystemMonitor() {
         } catch { return ["spark", "mem"] }
       })} label={poll((v) => {
         try {
-          const { mem } = JSON.parse(v || '{"mem":0}')
           return toSparkline(memHistory)
         } catch { return "" }
       })} />

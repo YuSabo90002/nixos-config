@@ -37,8 +37,10 @@ function getNetworkState(): NetState {
 
 const INIT: NetState = { icon: "network-wireless-symbolic", label: "" }
 
+// モジュールレベルで単一の poll を作成し、全モニターで共有する
+const poll = createPoll(JSON.stringify(INIT), 5000, () => JSON.stringify(getNetworkState()))
+
 export default function NetworkIndicator() {
-  const poll = createPoll(JSON.stringify(INIT), 5000, () => JSON.stringify(getNetworkState()))
 
   return (
     <box cssClasses={["Network"]} spacing={4}>
