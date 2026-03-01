@@ -1,4 +1,4 @@
-import { Astal, Gtk } from "ags/gtk4"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Workspaces from "./bar/Workspaces"
 import Clock from "./bar/Clock"
 import MediaPlayer from "./bar/MediaPlayer"
@@ -9,14 +9,14 @@ import NotificationCenter from "./bar/NotificationCenter"
 import NetworkIndicator from "./bar/NetworkIndicator"
 import PowerMenu from "./bar/PowerMenu"
 
-export default function Bar(monitor: number) {
+export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
   return (
     <window
       visible
-      name={`bar-${monitor}`}
-      monitor={monitor}
+      name={`bar-${gdkmonitor.get_connector()}`}
+      gdkmonitor={gdkmonitor}
       anchor={TOP | LEFT | RIGHT}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       cssClasses={["Bar"]}
