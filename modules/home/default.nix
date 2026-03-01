@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, config, ... }: {
   imports = [
     inputs.ags.homeManagerModules.default
     ./hyprland.nix
@@ -127,7 +127,7 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${inputs.ags.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ags run";
+      ExecStart = "${config.programs.ags.finalPackage}/bin/ags run";
       Restart = "on-failure";
       RestartSec = 3;
     };
