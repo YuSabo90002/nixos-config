@@ -330,8 +330,8 @@ in {
         Layout=
 
         [Groups/0/Items/1]
-        Name=
-        Layout=us
+        Name=keyboard-us
+        Layout=
 
         [GroupOrder]
         0=Default
