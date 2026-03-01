@@ -32,6 +32,7 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
+    package = pkgs.unstable.hyprland; # NixOSモジュール側と同じunstable版を使用
     systemd.enable = false; # UWSMが管理するため無効化
     settings = {
       monitor = [
