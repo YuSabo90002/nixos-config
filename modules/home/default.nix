@@ -119,6 +119,23 @@
     };
   };
 
+  # AGSバー（UWSMセッションに連動）
+  systemd.user.services.ags = {
+    Unit = {
+      Description = "AGS (Aylur's GTK Shell)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.ags}/bin/ags run";
+      Restart = "on-failure";
+      RestartSec = 3;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 }

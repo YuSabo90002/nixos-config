@@ -18,7 +18,7 @@ in {
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
 
-      exec-once = [ "ags run" "swww-daemon" "swww img ${wallpaper}" ];
+      exec-once = [ "swww-daemon" "swww img ${wallpaper}" ];
 
       # Monokai配色 + Dwindleレイアウト
       general = {
