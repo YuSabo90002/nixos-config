@@ -127,7 +127,7 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.ags}/bin/ags run";
+      ExecStart = "${inputs.ags.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ags run";
       Restart = "on-failure";
       RestartSec = 3;
     };
