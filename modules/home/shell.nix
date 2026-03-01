@@ -21,45 +21,39 @@
     enable = true;
     settings = {
       format = builtins.concatStringsSep "" [
-        "[](fg:#A6E22E)"
         "$directory"
-        "[](fg:#A6E22E bg:#AE81FF)"
         "$git_branch"
         "$git_status"
-        "[](fg:#AE81FF bg:#66D9EF)"
         "$nix_shell"
-        "[](fg:#66D9EF bg:#FD971F)"
         "$cmd_duration"
-        "[](fg:#FD971F)"
-        " $character"
+        "\n$character"
       ];
+
       directory = {
-        format = "[ $path ]($style)";
-        style = "bold bg:#A6E22E fg:#272822";
+        format = "[](fg:#A6E22E)[  $path ](bold bg:#A6E22E fg:#272822)[](fg:#A6E22E)";
         truncation_length = 3;
       };
+
       git_branch = {
-        format = "[ $symbol$branch ]($style)";
-        style = "bold bg:#AE81FF fg:#272822";
-        symbol = " ";
+        format = " [](fg:#AE81FF)[  $branch ](bold bg:#AE81FF fg:#272822)[](fg:#AE81FF)";
       };
+
       git_status = {
-        format = "[$all_status$ahead_behind]($style)";
-        style = "bg:#AE81FF fg:#272822";
+        format = "( [$all_status$ahead_behind](bold fg:#F92672))";
       };
+
       nix_shell = {
-        format = "[ $symbol$state ]($style)";
-        style = "bold bg:#66D9EF fg:#272822";
-        symbol = " ";
+        format = " [](fg:#66D9EF)[  $state ](bold bg:#66D9EF fg:#272822)[](fg:#66D9EF)";
       };
+
       cmd_duration = {
-        format = "[ 󰔟 $duration ]($style)";
-        style = "bold bg:#FD971F fg:#272822";
+        format = " [](fg:#FD971F)[ 󰔗 $duration ](bold bg:#FD971F fg:#272822)[](fg:#FD971F)";
         min_time = 2000;
       };
+
       character = {
-        success_symbol = "[➜](bold #A6E22E)";
-        error_symbol = "[✗](bold #F92672)";
+        success_symbol = "[❯](bold #A6E22E)";
+        error_symbol = "[❯](bold #F92672)";
       };
     };
   };
