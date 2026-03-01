@@ -6,10 +6,9 @@
     portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
   };
 
-  # グリーター(regreet)をCage上で起動
+  # グリーター(regreet)をHyprland(stable)上で起動し、サブモニターを無効化
   programs.regreet = {
     enable = true;
-    cageArgs = [ "-s" "-m" "last" ];
 
     # フォント: JetBrainsMono Nerd Font 14pt
     font = {
@@ -79,6 +78,18 @@
       }
     '';
   };
+
+  services.greetd.settings.default_session.command = lib.mkForce
+    "${pkgs.hyprland}/bin/Hyprland -c /etc/greetd/hyprland.conf";
+  environment.etc."greetd/hyprland.conf".text = ''
+    monitor = DP-1, preferred, auto, 1
+    monitor = DP-2, disable
+    exec-once = ${lib.getExe pkgs.regreet}; ${pkgs.hyprland}/bin/hyprctl dispatch exit
+    misc {
+      disable_hyprland_logo = true
+      disable_splash_rendering = true
+    }
+  '';
 
   programs.steam = {
     enable = true;
