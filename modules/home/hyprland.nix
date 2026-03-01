@@ -1,9 +1,24 @@
 { pkgs, ... }:
 let
-  wallpaper = builtins.fetchurl {
-    url = "https://w.wallhaven.cc/full/21/wallhaven-21deem.jpg";
-    sha256 = "048xy6qarfkya07r1a7s36913z71l9hxr45al3qcym1ql9jrkrqv";
+  wallpaperSrc = builtins.fetchurl {
+    url = "https://w.wallhaven.cc/full/9o/wallhaven-9o2rzk.jpg";
+    sha256 = "02q56klyc5n7q1x3pxysc4dqj44k9rs4lwrcc5xdxpzjir3viqzs";
   };
+
+  # 二画面スパン壁紙: 元画像を各モニター解像度に合わせて分割
+  # DP-1: 2560x1440 (左), DP-2: 1920x1080 (右)
+  splitWallpapers = pkgs.runCommand "split-wallpapers" {
+    nativeBuildInputs = [ pkgs.imagemagick ];
+  } ''
+    mkdir -p $out
+    # 元画像を4480x1440にリサイズ（中央クロップ）
+    magick ${wallpaperSrc} -resize 4480x1440^ \
+      -gravity center -extent 4480x1440 resized.jpg
+    # 左側: DP-1用 (2560x1440)
+    magick resized.jpg -crop 2560x1440+0+0 +repage $out/left.jpg
+    # 右側: DP-2用 (1920x1080, 上揃え)
+    magick resized.jpg -crop 1920x1080+2560+0 +repage $out/right.jpg
+  '';
 in {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -256,8 +271,14 @@ in {
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ "${wallpaper}" ];
-      wallpaper = [ ",${wallpaper}" ];
+      preload = [
+        "${splitWallpapers}/left.jpg"
+        "${splitWallpapers}/right.jpg"
+      ];
+      wallpaper = [
+        "DP-1,${splitWallpapers}/left.jpg"
+        "DP-2,${splitWallpapers}/right.jpg"
+      ];
     };
   };
 }
