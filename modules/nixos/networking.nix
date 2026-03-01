@@ -2,8 +2,12 @@
   networking.useNetworkd = true;
   systemd.network.enable = true;
 
+  # Docker の veth/bridge を除外するため、物理NICのみにマッチさせる
   systemd.network.networks."20-wired" = {
-    matchConfig.Type = "ether";
+    matchConfig = {
+      Type = "ether";
+      Name = "!veth* !docker* !br-*";
+    };
     networkConfig.DHCP = "yes";
     dhcpV4Config.RouteMetric = 100;
   };
@@ -28,12 +32,10 @@
 
   services.resolved = {
     enable = true;
-    settings.Resolve = {
-      DNSSEC = "allow-downgrade";
-      FallbackDNS = [
-        "1.1.1.1"
-        "8.8.8.8"
-      ];
-    };
+    dnssec = "allow-downgrade";
+    fallbackDns = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
   };
 }
