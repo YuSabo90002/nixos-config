@@ -116,6 +116,7 @@
       user.Name = "yuta";
       user.email = "yusabo90002@gmail.com";
       core.editor = "nvim";
+      credential.helper = "!${pkgs.unstable.gh}/bin/gh auth git-credential";
     };
   };
 
