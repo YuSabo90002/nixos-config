@@ -22,7 +22,7 @@
     grim
     slurp
     wl-clipboard
-    swww
+
     unstable.claude-code
     unstable.discord
     pavucontrol

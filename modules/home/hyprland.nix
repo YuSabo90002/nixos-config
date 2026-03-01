@@ -18,8 +18,6 @@ in {
       "$terminal" = "alacritty";
       "$menu" = "wofi --show drun";
 
-      exec-once = [ "swww-daemon" "swww img ${wallpaper}" ];
-
       # Monokai配色 + Dwindleレイアウト
       general = {
         gaps_in = 5;
@@ -253,5 +251,13 @@ in {
         pin = true
       }
     '';
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      preload = [ "${wallpaper}" ];
+      wallpaper = [ ",${wallpaper}" ];
+    };
   };
 }
