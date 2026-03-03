@@ -38,6 +38,11 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.astal.follows = "astal";
     };
+
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
