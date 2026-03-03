@@ -30,6 +30,16 @@
     unstable.gh
     unstable.uv
     unstable.volta
+
+    # Rust nightly ツールチェーン (fenix)
+    (fenix.complete.withComponents [
+      "cargo"
+      "clippy"
+      "rust-src"
+      "rustc"
+      "rustfmt"
+    ])
+    fenix.rust-analyzer
   ];
 
   programs.ags = {

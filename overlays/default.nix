@@ -6,4 +6,5 @@
       config.allowUnfree = true;
     };
   })
+  inputs.fenix.overlays.default
 ]
