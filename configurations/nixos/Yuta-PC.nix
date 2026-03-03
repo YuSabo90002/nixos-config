@@ -10,14 +10,7 @@ in
 {
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    (final: _prev: {
-      unstable = import inputs.nixpkgs-unstable {
-        system = final.stdenv.hostPlatform.system;
-        config.allowUnfree = true;
-      };
-    })
-  ];
+  nixpkgs.overlays = import ../../overlays { inherit inputs; };
 
   # unstable Hyprlandに合わせてモジュールもunstableから取得
   disabledModules = [
