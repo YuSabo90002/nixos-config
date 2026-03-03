@@ -7,4 +7,7 @@
     };
   })
   inputs.fenix.overlays.default
+  (final: _prev: {
+    specify-cli = final.callPackage ../packages/specify-cli.nix { };
+  })
 ]

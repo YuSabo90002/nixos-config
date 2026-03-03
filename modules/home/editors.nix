@@ -27,6 +27,7 @@
     profiles.default = {
       extensions = with pkgs.unstable.vscode-extensions; [
         ms-ceintl.vscode-language-pack-ja
+        anthropic.claude-code
       ];
     };
   };

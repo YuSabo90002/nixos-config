@@ -30,6 +30,7 @@
     unstable.gh
     unstable.uv
     unstable.volta
+    specify-cli
 
     # Rust nightly ツールチェーン (fenix)
     (fenix.complete.withComponents [
