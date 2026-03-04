@@ -31,6 +31,7 @@
     unstable.uv
     unstable.volta
     specify-cli
+    nmap
 
     # Rust nightly ツールチェーン (fenix)
     (fenix.complete.withComponents [
