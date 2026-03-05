@@ -24,6 +24,7 @@
   programs.vscode = {
     enable = true;
     package = pkgs.unstable.vscode;
+    mutableExtensionsDir = false;
     profiles.default = {
       extensions = [
         pkgs.vscode-marketplace.ms-ceintl.vscode-language-pack-ja
