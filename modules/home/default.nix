@@ -23,7 +23,7 @@
     slurp
     wl-clipboard
 
-    unstable.claude-code
+    llm-agents.claude-code
     unstable.discord
     pavucontrol
     winboat
