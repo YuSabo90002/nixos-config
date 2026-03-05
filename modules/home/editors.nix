@@ -28,6 +28,7 @@
       extensions = [
         pkgs.vscode-marketplace.ms-ceintl.vscode-language-pack-ja
         pkgs.vscode-marketplace.anthropic.claude-code
+        pkgs.vscode-marketplace.jnoortheen.nix-ide
       ];
       userSettings = {
         "claudeCode.preferredLocation" = "panel";
