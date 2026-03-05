@@ -25,10 +25,13 @@
     enable = true;
     package = pkgs.unstable.vscode;
     profiles.default = {
-      extensions = with pkgs.unstable.vscode-extensions; [
-        ms-ceintl.vscode-language-pack-ja
-        anthropic.claude-code
+      extensions = [
+        pkgs.vscode-marketplace.ms-ceintl.vscode-language-pack-ja
+        pkgs.vscode-marketplace.anthropic.claude-code
       ];
+      userSettings = {
+        "claudeCode.preferredLocation" = "panel";
+      };
     };
   };
 }

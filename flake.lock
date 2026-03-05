@@ -328,6 +328,26 @@
         "type": "github"
       }
     },
+    "nix-vscode-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772678592,
+        "narHash": "sha256-1VZ1hg1YHW+WyBXIOfrQ9Oq+qLL0w93lkdKAiRRHEuI=",
+        "owner": "nix-community",
+        "repo": "nix-vscode-extensions",
+        "rev": "5521856f37c3d2654fe9b20b03331a6594f855c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-vscode-extensions",
+        "type": "github"
+      }
+    },
     "nixos-unified": {
       "locked": {
         "lastModified": 1764076447,
@@ -438,6 +458,7 @@
         "flake-parts": "flake-parts",
         "home-manager": "home-manager_2",
         "llm-agents": "llm-agents",
+        "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-unified": "nixos-unified",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
