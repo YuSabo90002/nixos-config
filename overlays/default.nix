@@ -7,9 +7,6 @@
     };
   })
   inputs.fenix.overlays.default
-  (final: _prev: {
-    specify-cli = final.callPackage ../packages/specify-cli.nix { };
-  })
   inputs.llm-agents.overlays.default
   inputs.nix-vscode-extensions.overlays.default
 ]
