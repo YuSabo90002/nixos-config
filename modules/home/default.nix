@@ -30,6 +30,7 @@
     unstable.gh
     unstable.uv
     unstable.volta
+    nyxt
     nmap
 
     # Rust nightly ツールチェーン (fenix)
