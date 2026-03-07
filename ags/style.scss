@@ -277,6 +277,172 @@ window.Bar .Workspaces {
   }
 }
 
+// パネルトグルボタン
+.PanelToggle {
+  background-color: transparent;
+  color: $fg;
+  padding: 0 6px;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+
+  &.active {
+    color: $green;
+    background-color: $bg-light;
+  }
+}
+
+// ステータスパネル
+window.StatusPanel {
+  background-color: transparent;
+}
+
+.panel-content {
+  background-color: $bar-bg;
+  border-radius: $radius;
+  border: 1px solid $bg-light;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  min-width: 320px;
+}
+
+.panel-section {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba(62, 61, 50, 0.5);
+  margin: 4px 0;
+}
+
+.panel-icon-btn {
+  background-color: transparent;
+  color: $blue;
+  padding: 4px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+
+  &.muted {
+    color: $fg-dim;
+  }
+}
+
+.panel-slider {
+  trough {
+    background-color: $bg-light;
+    border-radius: 4px;
+    min-height: 8px;
+  }
+
+  highlight {
+    background-color: $blue;
+    border-radius: 4px;
+  }
+
+  slider {
+    background-color: $fg;
+    border-radius: 999px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+}
+
+.panel-value {
+  color: $fg;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 36px;
+
+  &.warning { color: $yellow; }
+  &.critical { color: $red; }
+  &.normal { color: $green; }
+}
+
+.panel-status {
+  color: $fg-dim;
+  font-size: 11px;
+}
+
+.panel-section-icon {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 16px;
+}
+
+.cpu-color { color: $green; }
+.temp-color { color: $orange; }
+
+.temp-label {
+  color: $fg-dim;
+  font-size: 12px;
+}
+.mem-color { color: $yellow; }
+
+.panel-level {
+  min-height: 6px;
+  border-radius: 3px;
+
+  trough {
+    background-color: $bg-light;
+    border-radius: 3px;
+    min-height: 6px;
+  }
+}
+
+.cpu-level block.filled {
+  background-color: $green;
+  border-radius: 3px;
+}
+
+.temp-level block.filled {
+  background-color: $orange;
+  border-radius: 3px;
+}
+
+.mem-level block.filled {
+  background-color: $yellow;
+  border-radius: 3px;
+}
+
+// クイックトグル
+.toggle-btn {
+  background-color: $bg-light;
+  color: $fg;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: none;
+  font-size: 11px;
+
+  &:hover {
+    background-color: rgba(62, 61, 50, 0.8);
+  }
+
+  &.active {
+    background-color: rgba(166, 226, 46, 0.2);
+    color: $green;
+  }
+}
+
+// 電源ボタン
+.power-btn {
+  background-color: transparent;
+  color: $fg-dim;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: none;
+
+  &:hover {
+    background-color: $bg-light;
+    color: $red;
+  }
+}
+
 // 通知ポップアップ
 window.NotificationPopups {
   background-color: transparent;
