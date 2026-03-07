@@ -19,11 +19,39 @@ function PanelToggleButton() {
   )
 }
 
+function BarContent(isMain: boolean) {
+  const overlay = new Gtk.Overlay()
+
+  const base = (
+    <box>
+      <box hexpand halign={Gtk.Align.START}>
+        <Workspaces />
+      </box>
+      <box hexpand halign={Gtk.Align.END}>
+        <SystemMonitor />
+        <SysTray />
+        {isMain && <PanelToggleButton />}
+      </box>
+    </box>
+  ) as Gtk.Widget
+
+  const clock = (
+    <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
+      <Clock />
+    </box>
+  ) as Gtk.Widget
+
+  overlay.set_child(base)
+  overlay.add_overlay(clock)
+
+  return overlay
+}
+
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
   const isMain = gdkmonitor.get_connector() === "DP-1"
 
-  return (
+  const win = (
     <window
       visible
       name={`bar-${gdkmonitor.get_connector()}`}
@@ -31,22 +59,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       anchor={TOP | LEFT | RIGHT}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       cssClasses={["Bar"]}
-    >
-      <box>
-        <box hexpand halign={Gtk.Align.START}>
-          <Workspaces />
-        </box>
+    />
+  ) as Astal.Window
 
-        <box>
-          <Clock />
-        </box>
+  win.set_child(BarContent(isMain))
 
-        <box hexpand halign={Gtk.Align.END}>
-          <SystemMonitor />
-          <SysTray />
-          {isMain && <PanelToggleButton />}
-        </box>
-      </box>
-    </window>
-  )
+  return win
 }

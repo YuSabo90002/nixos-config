@@ -1,14 +1,27 @@
 import { createPoll } from "ags/time"
+import { toggleCalendar, calendarIsOpen } from "../CalendarPopup"
 
 // モジュールレベルで単一の poll を作成し、全モニターで共有する
+const pad = (n: number) => n.toString().padStart(2, "0")
+
 const time = createPoll("", 1000, () => {
   const now = new Date()
-  return now.toLocaleTimeString("ja-JP", {
-    hour: "2-digit",
-    minute: "2-digit",
-  })
+  const y = now.getFullYear()
+  const m = pad(now.getMonth() + 1)
+  const d = pad(now.getDate())
+  const hh = pad(now.getHours())
+  const mm = pad(now.getMinutes())
+  const ss = pad(now.getSeconds())
+  return `${y}/${m}/${d} ${hh}:${mm}:${ss}`
 })
 
 export default function Clock() {
-  return <label cssClasses={["Clock"]} label={time} />
+  return (
+    <button
+      cssClasses={calendarIsOpen((open) => open ? ["Clock", "active"] : ["Clock"])}
+      onClicked={toggleCalendar}
+    >
+      <label label={time} />
+    </button>
+  )
 }

@@ -442,20 +442,20 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
   })
   win.add_controller(keyCtrl)
 
-  // パネル外クリックで閉じる
+  // パネル外クリックで閉じる（パネル内は無視）
   const bgClick = new Gtk.GestureClick()
-  bgClick.connect("released", () => setPanelOpen(false))
+  bgClick.connect("released", (_gesture: any, _n: number, x: number, y: number) => {
+    const content = win.get_child()
+    if (content) {
+      const alloc = content.get_allocation()
+      if (x >= alloc.x && x <= alloc.x + alloc.width &&
+          y >= alloc.y && y <= alloc.y + alloc.height) {
+        return
+      }
+    }
+    setPanelOpen(false)
+  })
   win.add_controller(bgClick)
-
-  // パネル内クリックはイベントを奪って閉じない
-  const content = win.get_child()
-  if (content) {
-    const contentClick = new Gtk.GestureClick()
-    contentClick.connect("pressed", () => {
-      contentClick.set_state(Gtk.EventSequenceState.CLAIMED)
-    })
-    content.add_controller(contentClick)
-  }
 
   return win
 }

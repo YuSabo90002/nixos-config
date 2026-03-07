@@ -3,6 +3,7 @@ import app from "ags/gtk4/app"
 import style from "./style.scss"
 import Bar from "./widget/Bar"
 import StatusPanel from "./widget/StatusPanel"
+import CalendarPopup from "./widget/CalendarPopup"
 import NotificationPopups from "./widget/NotificationPopups"
 import Hyprland from "gi://AstalHyprland"
 
@@ -33,14 +34,16 @@ app.start({
     // モニター名でバーを管理（Hyprland IDはGDKインデックスと一致しない場合がある）
     const bars = new Map<string, Gtk.Widget>()
     let panel: Gtk.Widget | null = null
+    let calendar: Gtk.Widget | null = null
 
     const ensureBar = (monitor: { id: number; name: string }) => {
       if (!bars.has(monitor.name)) {
         const gdkMon = findGdkMonitor(monitor.name)
         if (gdkMon) {
           bars.set(monitor.name, Bar(gdkMon))
-          if (monitor.name === MAIN_MONITOR && !panel) {
-            panel = StatusPanel(gdkMon)
+          if (monitor.name === MAIN_MONITOR) {
+            if (!panel) panel = StatusPanel(gdkMon)
+            if (!calendar) calendar = CalendarPopup(gdkMon)
           }
         }
       }
@@ -58,9 +61,9 @@ app.start({
         if (!stillExists) {
           widget.close()
           bars.delete(name)
-          if (name === MAIN_MONITOR && panel) {
-            panel.close()
-            panel = null
+          if (name === MAIN_MONITOR) {
+            if (panel) { panel.close(); panel = null }
+            if (calendar) { calendar.close(); calendar = null }
           }
           break
         }
