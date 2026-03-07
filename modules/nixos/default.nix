@@ -31,6 +31,16 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # KMSCON: TTYで日本語表示可能なターミナル
+  services.kmscon = {
+    enable = true;
+    hwRender = true;
+    fonts = [
+      { name = "HackGen Console NF"; package = pkgs.hackgen-nf-font; }
+    ];
+    extraConfig = "font-size=16";
+  };
+
   # システムパッケージ
   environment.systemPackages = with pkgs; [
     git

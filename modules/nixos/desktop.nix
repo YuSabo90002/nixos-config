@@ -1,4 +1,36 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, flake, ... }:
+let
+  inherit (flake) inputs;
+  system = pkgs.stdenv.hostPlatform.system;
+
+  wallpaperSrc = builtins.fetchurl {
+    url = "https://w.wallhaven.cc/full/9o/wallhaven-9o2rzk.jpg";
+    sha256 = "02q56klyc5n7q1x3pxysc4dqj44k9rs4lwrcc5xdxpzjir3viqzs";
+  };
+
+  # hyprlock風にブラー＋減光した壁紙を事前生成
+  blurredWallpaper = pkgs.runCommand "greeter-wallpaper" {
+    nativeBuildInputs = [ pkgs.imagemagick ];
+  } ''
+    mkdir -p $out
+    magick ${wallpaperSrc} \
+      -resize 2560x1440^ -gravity center -extent 2560x1440 \
+      -blur 0x21 -modulate 70 \
+      $out/wallpaper.jpg
+  '';
+
+  # グリーター用AGS (専用flake input、astal-greetライブラリ付き)
+  astalGreetPkg = inputs.astal-greeter.packages.${system}.greet;
+  greeterAgs = inputs.ags-greeter.packages.${system}.ags.override {
+    extraPackages = [ astalGreetPkg ];
+  };
+
+  # セッション起動スクリプト（Greet.login()が単一要素配列にするためラッパーが必要）
+  sessionScript = pkgs.writeShellScript "greeter-session" ''
+    exec uwsm start -e -D Hyprland hyprland.desktop
+  '';
+in
+{
   programs.hyprland = {
     enable = true;
     withUWSM = true;
@@ -6,144 +38,19 @@
     portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
   };
 
-  # グリーター(regreet)をHyprland(stable)上で起動し、サブモニターを無効化
-  programs.regreet = {
+  # グリーター: AGS v3 + astal-greet を Hyprland(stable) 上で起動
+  services.greetd = {
     enable = true;
-
-    # フォント: JetBrainsMono Nerd Font 14pt
-    font = {
-      package = pkgs.nerd-fonts.jetbrains-mono;
-      name = "JetBrainsMono Nerd Font";
-      size = 14;
-    };
-
-    # TOML設定
-    settings = {
-      GTK.application_prefer_dark_theme = true;
-
-      background = {
-        path = builtins.fetchurl {
-          url = "https://w.wallhaven.cc/full/8g/wallhaven-8geypo.png";
-          sha256 = "1jv86k8bsqwsrnhhyqgyaybjklbndllg32a81anmffy0c87hcqay";
-        };
-        fit = "Cover";
-      };
-
-      appearance.greeting_msg = "おかえりなさい";
-
-      widget.clock = {
-        format = "%m/%d (%a) %H:%M";
-      };
-    };
-
-    # Monokai配色のGTK4 CSS
-    extraCss = ''
-      window {
-        background-color: rgba(39, 40, 34, 0.75);
-      }
-
-      /* メインコンテナ */
-      box {
-        color: #F8F8F2;
-      }
-
-      /* グリーティングメッセージ */
-      label {
-        color: #F8F8F2;
-        font-weight: 400;
-      }
-
-      label.title {
-        font-size: 28px;
-        font-weight: bold;
-        color: #A6E22E;
-      }
-
-      /* 時計 */
-      label.clock {
-        font-size: 48px;
-        font-weight: bold;
-        color: #F8F8F2;
-      }
-
-      /* 入力フィールド */
-      entry {
-        background-color: rgba(62, 61, 50, 0.6);
-        color: #F8F8F2;
-        border-radius: 12px;
-        border: 2px solid rgba(166, 226, 46, 0.4);
-        padding: 10px 16px;
-        font-size: 16px;
-        min-height: 20px;
-      }
-
-      entry:focus {
-        border: 2px solid rgba(166, 226, 46, 0.9);
-        background-color: rgba(62, 61, 50, 0.8);
-      }
-
-      /* ログインボタン */
-      button {
-        background-color: rgba(166, 226, 46, 0.85);
-        color: #272822;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 15px;
-        padding: 8px 24px;
-        border: none;
-        min-height: 20px;
-      }
-
-      button:hover {
-        background-color: rgba(166, 226, 46, 1.0);
-      }
-
-      button:active {
-        background-color: rgba(130, 180, 30, 1.0);
-      }
-
-      /* セッション/ユーザー選択 */
-      combobox button,
-      dropdown button {
-        background-color: rgba(62, 61, 50, 0.6);
-        color: #F8F8F2;
-        border: 1px solid rgba(117, 113, 94, 0.5);
-        font-weight: normal;
-        font-size: 14px;
-        padding: 6px 12px;
-      }
-
-      combobox button:hover,
-      dropdown button:hover {
-        background-color: rgba(62, 61, 50, 0.9);
-        border: 1px solid rgba(166, 226, 46, 0.5);
-      }
-
-      /* エラーメッセージ */
-      .error label {
-        color: #F92672;
-        font-weight: bold;
-        font-size: 14px;
-      }
-
-      /* 電源ボタン類 */
-      button.destructive-action {
-        background-color: rgba(249, 38, 114, 0.7);
-        color: #F8F8F2;
-      }
-
-      button.destructive-action:hover {
-        background-color: rgba(249, 38, 114, 0.9);
-      }
-    '';
+    settings.default_session.command =
+      "${pkgs.hyprland}/bin/Hyprland -c /etc/greetd/hyprland.conf";
   };
 
-  services.greetd.settings.default_session.command = lib.mkForce
-    "${pkgs.hyprland}/bin/Hyprland -c /etc/greetd/hyprland.conf";
   environment.etc."greetd/hyprland.conf".text = ''
     monitor = DP-1, preferred, auto, 1
     monitor = DP-2, disable
-    exec-once = ${lib.getExe pkgs.regreet}; ${pkgs.hyprland}/bin/hyprctl dispatch exit
+    env = GREETER_SESSION_CMD,${sessionScript}
+    exec-once = ${pkgs.swaybg}/bin/swaybg -i ${blurredWallpaper}/wallpaper.jpg -m fill
+    exec-once = ${greeterAgs}/bin/ags run -d ${../../ags/greeter}; ${pkgs.hyprland}/bin/hyprctl dispatch exit
     misc {
       disable_hyprland_logo = true
       disable_splash_rendering = true

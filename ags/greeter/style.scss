@@ -1,0 +1,63 @@
+// Monokai 配色
+$bg: #272822;
+$bg-light: #3E3D32;
+$fg: #F8F8F2;
+$fg-dim: #75715E;
+$red: #F92672;
+$green: #A6E22E;
+
+window.Greeter {
+  background-color: transparent;
+}
+
+.greeter-overlay {
+  background-color: rgba(39, 40, 34, 0.5);
+}
+
+.greeter-time {
+  color: $fg;
+  font-size: 64px;
+  font-weight: bold;
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+.greeter-date {
+  color: $fg-dim;
+  font-size: 20px;
+  font-family: "JetBrainsMono Nerd Font";
+  margin-bottom: 8px;
+}
+
+.greeter-spacer {
+  min-height: 40px;
+}
+
+.greeter-username {
+  color: $fg;
+  font-size: 18px;
+  font-family: "JetBrainsMono Nerd Font";
+  margin-bottom: 12px;
+}
+
+.greeter-password {
+  min-width: 300px;
+  background-color: rgba(62, 61, 50, 0.8);
+  color: $fg;
+  border: 2px solid rgba(166, 226, 46, 0.8);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 16px;
+  margin-top: 4px;
+
+  &:focus {
+    border: 2px solid rgba(166, 226, 46, 1.0);
+    background-color: rgba(62, 61, 50, 0.95);
+  }
+}
+
+.greeter-error {
+  color: $red;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 12px;
+}

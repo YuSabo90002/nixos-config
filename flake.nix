@@ -52,6 +52,17 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # グリーター用 (コミットハッシュ固定、nix flake updateで更新されない)
+    ags-greeter = {
+      url = "github:aylur/ags/e169694390548dfd38ff40f1ef2163d6c3ffe3ea";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.astal.follows = "astal-greeter";
+    };
+    astal-greeter = {
+      url = "github:aylur/astal/eb235f8813bdea2a4a38ac228f2efc4e2a8a90af";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = inputs:
