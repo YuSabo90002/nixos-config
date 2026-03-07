@@ -2,12 +2,8 @@
   networking.useNetworkd = true;
   systemd.network.enable = true;
 
-  # Docker の veth/bridge を除外するため、物理NICのみにマッチさせる
   systemd.network.networks."20-wired" = {
-    matchConfig = {
-      Type = "ether";
-      Name = "!veth* !docker* !br-*";
-    };
+    matchConfig.Type = "ether";
     networkConfig.DHCP = "yes";
     dhcpV4Config.RouteMetric = 100;
   };

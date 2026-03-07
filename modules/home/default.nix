@@ -26,7 +26,7 @@
     llm-agents.claude-code
     unstable.discord
     pavucontrol
-    winboat
+
     unstable.gh
     unstable.uv
     unstable.volta
