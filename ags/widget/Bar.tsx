@@ -1,7 +1,6 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Workspaces from "./bar/Workspaces"
 import Clock from "./bar/Clock"
-import MediaPlayer from "./bar/MediaPlayer"
 import SysTray from "./bar/SysTray"
 import SystemMonitor from "./bar/SystemMonitor"
 import { toggleStatusPanel, statusPanelOpen } from "./StatusPanel"
@@ -39,7 +38,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         </box>
 
         <box>
-          <MediaPlayer />
           <Clock />
         </box>
 

@@ -408,6 +408,56 @@ window.StatusPanel {
   border-radius: 3px;
 }
 
+// メディアプレーヤー
+.media-section {
+  padding: 10px;
+}
+
+.media-color { color: $magenta; }
+
+.media-cover-box {
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 80px;
+  min-height: 80px;
+}
+
+.media-title {
+  color: $fg;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.media-artist {
+  color: $fg-dim;
+  font-size: 11px;
+}
+
+.media-ctrl-btn {
+  background-color: transparent;
+  color: $fg;
+  padding: 6px;
+  border-radius: 999px;
+  border: none;
+  box-shadow: none;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+
+  &:insensitive {
+    color: rgba(117, 113, 94, 0.4);
+  }
+}
+
+.media-play-btn {
+  color: $green;
+
+  &:hover {
+    background-color: rgba(166, 226, 46, 0.15);
+  }
+}
+
 // クイックトグル
 .toggle-btn {
   background-color: $bg-light;

@@ -1,9 +1,10 @@
-import { createState, createBinding, type Accessor } from "ags"
+import { createState, createBinding, With, type Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import { readFile } from "ags/file"
 import { exec, execAsync } from "ags/process"
 import Wp from "gi://AstalWp"
+import Mpris from "gi://AstalMpris"
 import Notifd from "gi://AstalNotifd"
 
 const [panelOpen, setPanelOpen] = createState(false)
@@ -257,6 +258,99 @@ function TemperatureSection() {
   )
 }
 
+// --- メディアプレーヤーセクション ---
+function MediaSection() {
+  const mpris = Mpris.get_default()
+  const players = createBinding(mpris, "players")
+
+  return (
+    <box cssClasses={["panel-section", "media-section"]} orientation={Gtk.Orientation.VERTICAL} spacing={8}>
+      <With value={players}>
+        {(ps) => {
+          const player = ps[0]
+          if (!player) {
+            return (
+              <box spacing={8}>
+                <label cssClasses={["panel-section-icon", "media-color"]} label="󰎇" />
+                <label cssClasses={["panel-status"]} label="再生中の音楽なし" />
+              </box>
+            )
+          }
+
+          const title = createBinding(player, "title")
+          const artist = createBinding(player, "artist")
+          const coverArt = createBinding(player, "coverArt")
+          const playbackStatus = createBinding(player, "playbackStatus")
+          const canGoNext = createBinding(player, "canGoNext")
+          const canGoPrevious = createBinding(player, "canGoPrevious")
+          const canControl = createBinding(player, "canControl")
+
+          return (
+            <box spacing={10}>
+              {/* アルバムアート */}
+              <box
+                cssClasses={["media-cover-box"]}
+                widthRequest={80}
+                heightRequest={80}
+              >
+                <image
+                  cssClasses={["media-cover"]}
+                  file={coverArt((c) => c || "")}
+                  pixelSize={80}
+                />
+              </box>
+              {/* 曲情報 + コントロール */}
+              <box orientation={Gtk.Orientation.VERTICAL} hexpand spacing={2} valign={Gtk.Align.CENTER}>
+                <label
+                  cssClasses={["media-title"]}
+                  label={title((t) => t || "不明な曲")}
+                  halign={Gtk.Align.START}
+                  ellipsize={3}
+                  maxWidthChars={24}
+                />
+                <label
+                  cssClasses={["media-artist"]}
+                  label={artist((a) => a || "")}
+                  halign={Gtk.Align.START}
+                  ellipsize={3}
+                  maxWidthChars={24}
+                />
+                <box spacing={4} halign={Gtk.Align.START}>
+                  <button
+                    cssClasses={["media-ctrl-btn"]}
+                    sensitive={canGoPrevious}
+                    onClicked={() => player.previous()}
+                  >
+                    <image iconName="media-skip-backward-symbolic" />
+                  </button>
+                  <button
+                    cssClasses={["media-ctrl-btn", "media-play-btn"]}
+                    sensitive={canControl}
+                    onClicked={() => player.play_pause()}
+                  >
+                    <image iconName={playbackStatus((s) =>
+                      s === Mpris.PlaybackStatus.PLAYING
+                        ? "media-playback-pause-symbolic"
+                        : "media-playback-start-symbolic"
+                    )} />
+                  </button>
+                  <button
+                    cssClasses={["media-ctrl-btn"]}
+                    sensitive={canGoNext}
+                    onClicked={() => player.next()}
+                  >
+                    <image iconName="media-skip-forward-symbolic" />
+                  </button>
+                </box>
+              </box>
+            </box>
+          )
+        }}
+      </With>
+    </box>
+  )
+}
+
 // --- クイック設定ボタン ---
 function QuickToggles() {
   const notifd = Notifd.get_default()
@@ -324,6 +418,7 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
       cssClasses={["StatusPanel"]}
     >
       <box orientation={Gtk.Orientation.VERTICAL} cssClasses={["panel-content"]} spacing={0}>
+        <MediaSection />
         <VolumeSection />
         <NetworkSection />
         <SystemSection />
