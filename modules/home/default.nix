@@ -25,6 +25,7 @@
 
     llm-agents.claude-code
     unstable.discord
+    unstable.ytmdesktop
     pavucontrol
 
     unstable.gh
