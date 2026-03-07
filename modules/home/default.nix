@@ -56,6 +56,14 @@
     ];
   };
 
+  gtk = {
+    enable = true;
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+  };
+
   programs.wofi = {
     enable = true;
     settings = {
