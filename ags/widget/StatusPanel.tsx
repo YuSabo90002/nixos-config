@@ -404,20 +404,26 @@ function PowerButtons() {
 
 // --- パネル本体 ---
 export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
-  const { TOP, RIGHT } = Astal.WindowAnchor
+  const { TOP, RIGHT, BOTTOM, LEFT } = Astal.WindowAnchor
 
-  return (
+  const win = (
     <window
       visible={panelOpen}
       name={`status-panel-${gdkmonitor.get_connector()}`}
       gdkmonitor={gdkmonitor}
-      anchor={TOP | RIGHT}
-      marginTop={2}
+      anchor={TOP | RIGHT | BOTTOM | LEFT}
       exclusivity={Astal.Exclusivity.NORMAL}
       layer={Astal.Layer.TOP}
+      keymode={Astal.Keymode.ON_DEMAND}
       cssClasses={["StatusPanel"]}
     >
-      <box orientation={Gtk.Orientation.VERTICAL} cssClasses={["panel-content"]} spacing={0}>
+      <box
+        halign={Gtk.Align.END}
+        valign={Gtk.Align.START}
+        orientation={Gtk.Orientation.VERTICAL}
+        cssClasses={["panel-content"]}
+        spacing={0}
+      >
         <MediaSection />
         <VolumeSection />
         <NetworkSection />
@@ -427,5 +433,29 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
         <PowerButtons />
       </box>
     </window>
-  )
+  ) as Astal.Window
+
+  // Escapeキーで閉じる
+  const keyCtrl = new Gtk.EventControllerKey()
+  keyCtrl.connect("key-pressed", (_ctrl: any, keyval: number) => {
+    if (keyval === Gdk.KEY_Escape) setPanelOpen(false)
+  })
+  win.add_controller(keyCtrl)
+
+  // パネル外クリックで閉じる
+  const bgClick = new Gtk.GestureClick()
+  bgClick.connect("released", () => setPanelOpen(false))
+  win.add_controller(bgClick)
+
+  // パネル内クリックはイベントを奪って閉じない
+  const content = win.get_child()
+  if (content) {
+    const contentClick = new Gtk.GestureClick()
+    contentClick.connect("pressed", () => {
+      contentClick.set_state(Gtk.EventSequenceState.CLAIMED)
+    })
+    content.add_controller(contentClick)
+  }
+
+  return win
 }
