@@ -138,6 +138,7 @@ in {
         "$mod, P, exec, $menu"
         "$mod, C, killactive"
         "$mod, M, exit"
+        "$mod CTRL, L, exec, loginctl lock-session"
 
         # レイアウト操作
         "$mod, V, layoutmsg, preselect d"
@@ -266,6 +267,94 @@ in {
         pin = true
       }
     '';
+  };
+
+  # hyprlock: ロック画面
+  programs.hyprlock = {
+    enable = true;
+    package = pkgs.unstable.hyprlock;
+    settings = {
+      general = {
+        grace = 3;
+        hide_cursor = true;
+        ignore_empty_input = true;
+      };
+
+      background = {
+        path = "${splitWallpapers}/left.jpg";
+        blur_passes = 3;
+        blur_size = 7;
+        brightness = 0.7;
+        vibrancy = 0.2;
+      };
+
+      input-field = {
+        monitor = "DP-1";
+        size = "300, 50";
+        outline_thickness = 3;
+        dots_size = 0.2;
+        dots_spacing = 0.15;
+        outer_color = "rgba(166, 226, 46, 0.8)";
+        inner_color = "rgba(62, 61, 50, 0.8)";
+        font_color = "rgb(248, 248, 242)";
+        fade_on_empty = true;
+        placeholder_text = "";
+        fail_color = "rgba(249, 38, 114, 0.8)";
+        fail_text = "";
+        position = "0, -20";
+        halign = "center";
+        valign = "center";
+      };
+
+      label = [
+        {
+          monitor = "DP-1";
+          text = "$TIME";
+          color = "rgba(248, 248, 242, 1)";
+          font_size = 64;
+          font_family = "JetBrainsMono Nerd Font";
+          position = "0, 80";
+          halign = "center";
+          valign = "center";
+        }
+        {
+          monitor = "DP-1";
+          text = "cmd[60000] date +'%m/%d (%a)'";
+          color = "rgba(117, 113, 94, 1)";
+          font_size = 20;
+          font_family = "JetBrainsMono Nerd Font";
+          position = "0, 140";
+          halign = "center";
+          valign = "center";
+        }
+      ];
+    };
+  };
+
+  # hypridle: アイドル管理
+  services.hypridle = {
+    enable = true;
+    package = pkgs.unstable.hypridle;
+    settings = {
+      general = {
+        lock_cmd = "pidof hyprlock || hyprlock";
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+      };
+
+      listener = [
+        {
+          timeout = 600;
+          on-timeout = "loginctl lock-session";
+          on-resume = "";
+        }
+        {
+          timeout = 900;
+          on-timeout = "systemctl suspend";
+          on-resume = "";
+        }
+      ];
+    };
   };
 
   services.hyprpaper = {
