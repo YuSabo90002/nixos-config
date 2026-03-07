@@ -211,6 +211,12 @@ in {
         "$mod, mouse:273, resizewindow"
       ];
 
+      # 自動起動
+      exec-once = [
+        "discord"
+        "ytmdesktop"
+      ];
+
     }; # settings end
 
     # ウィンドウルール (0.53 named block構文)
@@ -258,7 +264,12 @@ in {
       windowrule {
         name = discord-ws
         match:class = discord
-        workspace = 4
+        workspace = 10
+      }
+      windowrule {
+        name = ytmdesktop-ws
+        match:class = YouTube Music Desktop App
+        workspace = 10
       }
       windowrule {
         name = pip-float
