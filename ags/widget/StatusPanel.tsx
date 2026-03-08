@@ -406,20 +406,13 @@ function PowerButtons() {
 export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
   const { TOP, RIGHT, BOTTOM, LEFT } = Astal.WindowAnchor
 
-  const win = (
-    <window
-      visible={panelOpen}
-      name={`status-panel-${gdkmonitor.get_connector()}`}
-      gdkmonitor={gdkmonitor}
-      anchor={TOP | RIGHT | BOTTOM | LEFT}
-      exclusivity={Astal.Exclusivity.NORMAL}
-      layer={Astal.Layer.TOP}
-      keymode={Astal.Keymode.ON_DEMAND}
-      cssClasses={["StatusPanel"]}
+  const revealer = (
+    <revealer
+      transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
+      transitionDuration={250}
+      revealChild={false}
     >
       <box
-        halign={Gtk.Align.END}
-        valign={Gtk.Align.START}
         orientation={Gtk.Orientation.VERTICAL}
         cssClasses={["panel-content"]}
         spacing={0}
@@ -432,8 +425,42 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
         <QuickToggles />
         <PowerButtons />
       </box>
+    </revealer>
+  ) as Gtk.Revealer
+
+  const win = (
+    <window
+      visible={false}
+      name={`status-panel-${gdkmonitor.get_connector()}`}
+      gdkmonitor={gdkmonitor}
+      anchor={TOP | RIGHT | BOTTOM | LEFT}
+      exclusivity={Astal.Exclusivity.NORMAL}
+      layer={Astal.Layer.TOP}
+      keymode={Astal.Keymode.ON_DEMAND}
+      cssClasses={["StatusPanel"]}
+    >
+      <box halign={Gtk.Align.END} valign={Gtk.Align.START}>
+        {revealer}
+      </box>
     </window>
   ) as Astal.Window
+
+  // パネルの開閉アニメーション制御
+  panelOpen.subscribe(() => {
+    if (panelOpen.peek()) {
+      win.visible = true
+      revealer.revealChild = true
+    } else {
+      revealer.revealChild = false
+    }
+  })
+
+  // 閉じるアニメーション完了後にウィンドウを非表示
+  revealer.connect("notify::child-revealed", () => {
+    if (!revealer.childRevealed) {
+      win.visible = false
+    }
+  })
 
   // Escapeキーで閉じる
   const keyCtrl = new Gtk.EventControllerKey()
