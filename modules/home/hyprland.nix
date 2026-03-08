@@ -31,7 +31,7 @@ in {
       ];
       "$mod" = "SUPER";
       "$terminal" = "alacritty";
-      "$menu" = "wofi --show drun";
+      "$menu" = "ags request -i yuta-shell toggle-launcher";
 
       # Monokai配色 + Dwindleレイアウト
       general = {

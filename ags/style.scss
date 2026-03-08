@@ -541,6 +541,74 @@ window.StatusPanel {
   }
 }
 
+// ランチャー
+window.Launcher {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.launcher-content {
+  background-color: $bar-bg;
+  border-radius: $radius;
+  border: 2px solid rgba(166, 226, 46, 0.6);
+  margin-top: 100px;
+  padding: 12px;
+  min-width: 1280px;
+}
+
+.launcher-search {
+  background-color: rgba(30, 31, 28, 0.95);
+  color: $fg;
+  border: none;
+  border-bottom: 2px solid $fg-dim;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 16px;
+  caret-color: $green;
+
+  &:focus {
+    border-bottom-color: $green;
+  }
+
+  // プレースホルダ
+  text {
+    &:disabled {
+      color: $fg-dim;
+    }
+  }
+}
+
+.launcher-list {
+  margin-top: 4px;
+}
+
+.launcher-item {
+  background-color: transparent;
+  color: $fg;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+
+  &:hover, &.selected {
+    background-color: rgba(166, 226, 46, 0.15);
+  }
+
+  &.selected {
+    border-left: 3px solid $green;
+  }
+}
+
+.launcher-item-name {
+  color: $fg;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.launcher-item-desc {
+  color: $fg-dim;
+  font-size: 12px;
+}
+
 // 通知ポップアップ
 window.NotificationPopups {
   background-color: transparent;

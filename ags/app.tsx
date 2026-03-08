@@ -5,6 +5,7 @@ import Bar from "./widget/Bar"
 import StatusPanel from "./widget/StatusPanel"
 import CalendarPopup from "./widget/CalendarPopup"
 import NotificationPopups from "./widget/NotificationPopups"
+import Launcher, { toggleLauncher } from "./widget/Launcher"
 import Hyprland from "gi://AstalHyprland"
 
 const settings = Gtk.Settings.get_default()!
@@ -77,5 +78,17 @@ app.start({
     }
 
     NotificationPopups()
+
+    // メインモニターにランチャーを表示
+    const mainGdk = findGdkMonitor(MAIN_MONITOR)
+    if (mainGdk) Launcher(mainGdk)
+  },
+  requestHandler(request: string, respond: (res: string) => void) {
+    if (request.includes("toggle-launcher")) {
+      toggleLauncher()
+      respond("ok")
+    } else {
+      respond("unknown")
+    }
   },
 })

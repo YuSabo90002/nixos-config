@@ -48,6 +48,7 @@
     enable = true;
     configDir = ../../ags;
     extraPackages = with inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}; [
+      apps
       hyprland
       wireplumber
       mpris
@@ -64,71 +65,7 @@
     };
   };
 
-  programs.wofi = {
-    enable = true;
-    settings = {
-      width = 600;
-      height = 400;
-      show = "drun";
-      prompt = "";
-      allow_images = true;
-      image_size = 24;
-      insensitive = true;
-    };
-    style = ''
-      * {
-        font-family: "JetBrainsMono Nerd Font", monospace;
-        font-size: 14px;
-      }
-
-      window {
-        background-color: rgba(39, 40, 34, 0.92);
-        border: 2px solid #A6E22E;
-        border-radius: 10px;
-      }
-
-      #input {
-        margin: 8px;
-        padding: 8px 12px;
-        border: none;
-        border-bottom: 2px solid #75715E;
-        background-color: #1e1f1c;
-        color: #F8F8F2;
-        border-radius: 6px;
-      }
-
-      #input:focus {
-        border-bottom-color: #A6E22E;
-      }
-
-      #outer-box {
-        margin: 4px;
-      }
-
-      #scroll {
-        margin: 4px 8px;
-      }
-
-      #entry {
-        padding: 6px 8px;
-        border-radius: 6px;
-        color: #F8F8F2;
-      }
-
-      #entry:selected {
-        background-color: rgba(166, 226, 46, 0.2);
-        color: #A6E22E;
-      }
-
-      #text {
-        color: #F8F8F2;
-      }
-
-      #text:selected {
-        color: #A6E22E;
-      }
-    '';
-  };
+  # ランチャーはAGSに統合済み（ags/widget/Launcher.tsx）
 
   programs.git = {
     enable = true;
