@@ -57,6 +57,73 @@ export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
     }
   }
 
+  // パスワード入力欄（アニメーション付きドット表示）
+  function createPasswordInput(): Gtk.Overlay {
+    const overlay = new Gtk.Overlay()
+    overlay.halign = Gtk.Align.CENTER
+
+    const entry = new Gtk.Entry()
+    entry.add_css_class("greeter-password")
+    entry.add_css_class("greeter-password-hidden")
+    entry.visibility = false
+    entry.xalign = 0.5
+    entry.halign = Gtk.Align.CENTER
+
+    const dotsBox = new Gtk.Box()
+    dotsBox.add_css_class("greeter-dots")
+    dotsBox.halign = Gtk.Align.CENTER
+    dotsBox.valign = Gtk.Align.CENTER
+    dotsBox.canTarget = false
+    dotsBox.spacing = 2
+
+    overlay.set_child(entry)
+    overlay.add_overlay(dotsBox)
+
+    let currentLen = 0
+
+    entry.connect("notify::text", () => {
+      const newLen = entry.get_text().length
+
+      if (newLen > currentLen) {
+        // ドット追加（アニメーション付き）
+        for (let i = currentLen; i < newLen; i++) {
+          const dot = new Gtk.Label({ label: "●" })
+          dot.add_css_class("greeter-dot")
+          dotsBox.append(dot)
+        }
+      } else if (newLen < currentLen) {
+        // ドット削除
+        let toRemove = currentLen - newLen
+        while (toRemove > 0) {
+          const last = dotsBox.get_last_child()
+          if (last) dotsBox.remove(last)
+          toRemove--
+        }
+      }
+      currentLen = newLen
+
+      if (newLen > 0) {
+        entry.remove_css_class("greeter-password-hidden")
+        entry.add_css_class("greeter-password-visible")
+      } else {
+        entry.remove_css_class("greeter-password-visible")
+        entry.add_css_class("greeter-password-hidden")
+      }
+    })
+
+    entry.connect("activate", () => {
+      handleLogin(entry.get_text(), entry)
+    })
+
+    entry.connect("realize", () => {
+      entry.grab_focus()
+    })
+
+    return overlay
+  }
+
+  const passwordInput = createPasswordInput()
+
   return (
     <window
       name="Greeter"
@@ -88,19 +155,8 @@ export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
             label={username}
           />
 
-          {/* パスワード入力欄 */}
-          <entry
-            cssClasses={["greeter-password"]}
-            placeholderText=""
-            visibility={false}
-            halign={Gtk.Align.CENTER}
-            onActivate={(self: Gtk.Entry) => {
-              handleLogin(self.get_text(), self)
-            }}
-            onRealize={(self: Gtk.Entry) => {
-              self.grab_focus()
-            }}
-          />
+          {/* パスワード入力欄（アニメーション付きドット） */}
+          {passwordInput}
 
           {/* エラーメッセージ */}
           <label

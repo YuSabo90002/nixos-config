@@ -41,18 +41,58 @@ window.Greeter {
 
 .greeter-password {
   min-width: 300px;
-  background-color: rgba(62, 61, 50, 0.8);
-  color: $fg;
-  border: 2px solid rgba(166, 226, 46, 0.8);
-  border-radius: 12px;
-  padding: 10px 16px;
+  border-radius: 999px;
+  padding: 12px 24px;
   font-size: 16px;
   margin-top: 4px;
 
-  &:focus {
-    border: 2px solid rgba(166, 226, 46, 1.0);
-    background-color: rgba(62, 61, 50, 0.95);
+  // GTKデフォルトのパスワードドットを透明にする
+  text {
+    color: transparent;
+    -gtk-caret-color: transparent;
   }
+}
+
+.greeter-password-hidden {
+  background-color: transparent;
+  border: 2px solid transparent;
+  outline: none;
+  box-shadow: none;
+  opacity: 0;
+}
+
+.greeter-password-visible {
+  background-color: rgba(62, 61, 50, 0.8);
+  border: 3px solid rgba(166, 226, 46, 0.8);
+  outline: none;
+  box-shadow: none;
+
+  &:focus {
+    border: 3px solid rgba(166, 226, 46, 1.0);
+    background-color: rgba(62, 61, 50, 0.95);
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+// アニメーション付きパスワードドット
+@keyframes dot-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.greeter-dots {
+  // オーバーレイとしてentry上に表示
+}
+
+.greeter-dot {
+  color: $fg;
+  font-size: 14px;
+  animation: dot-appear 0.15s ease-out;
 }
 
 .greeter-error {
