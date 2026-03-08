@@ -1,5 +1,5 @@
 import { createState } from "ags"
-import { Astal, Gtk } from "ags/gtk4"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import { execAsync } from "ags/process"
 import GLib from "gi://GLib?version=2.0"
@@ -26,9 +26,9 @@ function formatDate(): string {
   return `${m}/${d} (${w})`
 }
 
-export default function Greeter() {
-  const time = createPoll("", 1000, () => formatTime())
-  const date = createPoll("", 60000, () => formatDate())
+export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
+  const time = createPoll(formatTime(), 1000, () => formatTime())
+  const date = createPoll(formatDate(), 60000, () => formatDate())
   const [error, setError] = createState("")
 
   const username = "yuta"
@@ -61,6 +61,7 @@ export default function Greeter() {
     <window
       name="Greeter"
       cssClasses={["Greeter"]}
+      {...(gdkmonitor ? { gdkmonitor } : {})}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
       exclusivity={Astal.Exclusivity.IGNORE}
       keymode={Astal.Keymode.EXCLUSIVE}
@@ -71,12 +72,12 @@ export default function Greeter() {
           {/* 日付 */}
           <label
             cssClasses={["greeter-date"]}
-            label={date()}
+            label={date}
           />
           {/* 時計 */}
           <label
             cssClasses={["greeter-time"]}
-            label={time()}
+            label={time}
           />
 
           <box cssClasses={["greeter-spacer"]} />

@@ -46,8 +46,8 @@ in
   };
 
   environment.etc."greetd/hyprland.conf".text = ''
-    monitor = DP-1, preferred, auto, 1
-    monitor = DP-2, disable
+    monitor = DP-1, 2560x1440@60, 0x0, 1
+    monitor = DP-2, 1920x1080@60, 2560x0, 1
     env = GREETER_SESSION_CMD,${sessionScript}
     exec-once = ${pkgs.swaybg}/bin/swaybg -i ${blurredWallpaper}/wallpaper.jpg -m fill
     exec-once = ${greeterAgs}/bin/ags run -d ${../../ags/greeter}; ${pkgs.hyprland}/bin/hyprctl dispatch exit
