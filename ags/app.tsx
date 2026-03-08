@@ -71,6 +71,17 @@ app.start({
       }
     })
 
+    // GDKモニターリストの変更を監視
+    // sleep復帰時、Hyprlandのmonitor-addedよりGDKモニター追加が遅れることがあるため、
+    // GDK側の変更でもバー作成を試みる
+    const display = Gdk.Display.get_default()!
+    const gdkMonitors = display.get_monitors()
+    gdkMonitors.connect("items-changed", () => {
+      for (const monitor of hyprland.monitors) {
+        ensureBar(monitor)
+      }
+    })
+
     // リスナー接続後にモニター一覧をチェック
     // これにより、リスナー接続前に追加されたモニターも漏れなくバーが作成される
     for (const monitor of hyprland.monitors) {
