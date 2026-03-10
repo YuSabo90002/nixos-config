@@ -15,11 +15,11 @@ const time = createPoll("", 1000, () => {
   return `${y}/${m}/${d} ${hh}:${mm}:${ss}`
 })
 
-export default function Clock() {
+export default function Clock({ monitorName }: { monitorName: string }) {
   return (
     <button
-      cssClasses={calendarIsOpen((open) => open ? ["Clock", "active"] : ["Clock"])}
-      onClicked={toggleCalendar}
+      cssClasses={calendarIsOpen((m) => m === monitorName ? ["Clock", "active"] : ["Clock"])}
+      onClicked={() => toggleCalendar(monitorName)}
     >
       <label label={time} />
     </button>

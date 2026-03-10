@@ -1,12 +1,13 @@
 import { createState } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 
-const [calendarOpen, setCalendarOpen] = createState(false)
+// 開いているモニター名を保持（null = 閉じている）
+const [openMonitor, setOpenMonitor] = createState<string | null>(null)
 
-export const calendarIsOpen = calendarOpen
+export const calendarIsOpen = openMonitor
 
-export function toggleCalendar() {
-  setCalendarOpen((prev) => !prev)
+export function toggleCalendar(monitorName: string) {
+  setOpenMonitor((prev) => prev === null ? monitorName : null)
 }
 
 export default function CalendarPopup(gdkmonitor: Gdk.Monitor) {
@@ -14,7 +15,7 @@ export default function CalendarPopup(gdkmonitor: Gdk.Monitor) {
 
   const win = (
     <window
-      visible={calendarOpen}
+      visible={openMonitor((m) => m === gdkmonitor.get_connector())}
       name={`calendar-popup-${gdkmonitor.get_connector()}`}
       gdkmonitor={gdkmonitor}
       anchor={TOP | RIGHT | BOTTOM | LEFT}
@@ -36,7 +37,7 @@ export default function CalendarPopup(gdkmonitor: Gdk.Monitor) {
   // Escapeキーで閉じる
   const keyCtrl = new Gtk.EventControllerKey()
   keyCtrl.connect("key-pressed", (_ctrl: any, keyval: number) => {
-    if (keyval === Gdk.KEY_Escape) setCalendarOpen(false)
+    if (keyval === Gdk.KEY_Escape) setOpenMonitor(null)
   })
   win.add_controller(keyCtrl)
 
@@ -51,7 +52,7 @@ export default function CalendarPopup(gdkmonitor: Gdk.Monitor) {
         return
       }
     }
-    setCalendarOpen(false)
+    setOpenMonitor(null)
   })
   win.add_controller(bgClick)
 

@@ -19,7 +19,7 @@ function PanelToggleButton() {
   )
 }
 
-function BarContent(isMain: boolean) {
+function BarContent(isMain: boolean, monitorName: string) {
   const overlay = new Gtk.Overlay()
 
   const base = (
@@ -37,7 +37,7 @@ function BarContent(isMain: boolean) {
 
   const clock = (
     <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
-      <Clock />
+      <Clock monitorName={monitorName} />
     </box>
   ) as Gtk.Widget
 
@@ -62,7 +62,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
     />
   ) as Astal.Window
 
-  win.set_child(BarContent(isMain))
+  win.set_child(BarContent(isMain, gdkmonitor.get_connector()!))
 
   return win
 }

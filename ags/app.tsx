@@ -34,17 +34,19 @@ app.start({
 
     // モニター名でバーを管理（Hyprland IDはGDKインデックスと一致しない場合がある）
     const bars = new Map<string, Gtk.Widget>()
+    const calendars = new Map<string, Gtk.Widget>()
     let panel: Gtk.Widget | null = null
-    let calendar: Gtk.Widget | null = null
 
     const ensureBar = (monitor: { id: number; name: string }) => {
       if (!bars.has(monitor.name)) {
         const gdkMon = findGdkMonitor(monitor.name)
         if (gdkMon) {
           bars.set(monitor.name, Bar(gdkMon))
+          if (!calendars.has(monitor.name)) {
+            calendars.set(monitor.name, CalendarPopup(gdkMon))
+          }
           if (monitor.name === MAIN_MONITOR) {
             if (!panel) panel = StatusPanel(gdkMon)
-            if (!calendar) calendar = CalendarPopup(gdkMon)
           }
         }
       }
@@ -62,9 +64,12 @@ app.start({
         if (!stillExists) {
           widget.close()
           bars.delete(name)
+          if (calendars.has(name)) {
+            calendars.get(name)!.close()
+            calendars.delete(name)
+          }
           if (name === MAIN_MONITOR) {
             if (panel) { panel.close(); panel = null }
-            if (calendar) { calendar.close(); calendar = null }
           }
           break
         }
