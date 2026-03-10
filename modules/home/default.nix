@@ -6,6 +6,7 @@
     ./shell.nix
     ./terminal.nix
     ./editors.nix
+    ./tmux.nix
   ];
 
   home = {
