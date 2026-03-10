@@ -1,4 +1,5 @@
 import { createState } from "ags"
+import { execAsync } from "ags/process"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Apps from "gi://AstalApps"
 
@@ -95,7 +96,13 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
   }
 
   function launchApp(app: Apps.Application) {
-    app.launch()
+    // uwsm app 経由で systemd ユニットとして独立起動
+    const desktopId = app.entry
+    if (desktopId) {
+      execAsync(["uwsm", "app", desktopId])
+    } else {
+      app.launch()
+    }
     setLauncherOpen(false)
   }
 
