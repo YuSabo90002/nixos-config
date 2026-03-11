@@ -56,5 +56,11 @@ in {
     };
   };
 
+  # Podman
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
   system.stateVersion = "25.11";
 }
