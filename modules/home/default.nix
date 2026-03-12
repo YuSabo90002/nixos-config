@@ -16,7 +16,7 @@
   };
 
   home.packages = with pkgs; [
-    firefox
+    unstable.librewolf
     ripgrep
     fd
     btop
