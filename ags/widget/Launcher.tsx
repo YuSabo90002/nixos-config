@@ -99,7 +99,13 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
     // uwsm app 経由で systemd ユニットとして独立起動
     const desktopId = app.entry
     if (desktopId) {
-      execAsync(["uwsm", "app", desktopId])
+      if (desktopId.includes(" ")) {
+        // スペース入りDesktop Entry IDはuwsmが受け付けないためExecコマンドで渡す
+        const cmd = app.executable.split(/\s+/)
+        execAsync(["uwsm", "app", "--", ...cmd])
+      } else {
+        execAsync(["uwsm", "app", desktopId])
+      }
     } else {
       app.launch()
     }
