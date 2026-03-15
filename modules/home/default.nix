@@ -34,7 +34,6 @@
     unstable.uv
     unstable.volta
     nmap
-    inetutils # telnet等
   ];
 
   programs.ags = {
