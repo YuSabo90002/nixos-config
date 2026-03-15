@@ -52,5 +52,20 @@
     ];
   };
 
+  # NTPサーバを日本国内サーバ（NICT）に設定
+  services.timesyncd = {
+    enable = true;
+    servers = [
+      "ntp.nict.jp"
+      "ntp.jst.mfeed.ad.jp"
+    ];
+    fallbackServers = [
+      "0.nixos.pool.ntp.org"
+      "1.nixos.pool.ntp.org"
+      "2.nixos.pool.ntp.org"
+      "3.nixos.pool.ntp.org"
+    ];
+  };
+
   services.xserver.desktopManager.runXdgAutostartIfNone = true;
 }
