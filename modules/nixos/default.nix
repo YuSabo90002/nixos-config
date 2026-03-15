@@ -62,5 +62,11 @@ in {
     dockerCompat = true;
   };
 
+  # direnv + nix-direnv
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   system.stateVersion = "25.11";
 }
