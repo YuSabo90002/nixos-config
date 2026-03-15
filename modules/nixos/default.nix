@@ -68,5 +68,9 @@ in {
     nix-direnv.enable = true;
   };
 
+  # zram swap
+  zramSwap.enable = true;
+  boot.kernel.sysctl."vm.swappiness" = 180;
+
   system.stateVersion = "25.11";
 }
