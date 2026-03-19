@@ -214,7 +214,7 @@ in {
       # 自動起動
       exec-once = [
         "discord"
-        "ytmdesktop"
+        "pear-desktop"
       ];
 
     }; # settings end
@@ -267,8 +267,8 @@ in {
         workspace = 10
       }
       windowrule {
-        name = ytmdesktop-ws
-        match:class = YouTube Music Desktop App
+        name = youtube-music-ws
+        match:class = com.github.th_ch.youtube_music
         workspace = 10
       }
       windowrule {
