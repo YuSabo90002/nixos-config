@@ -27,7 +27,7 @@
 
     llm-agents.claude-code
     unstable.discord
-    unstable.youtube-music
+    unstable.pear-desktop
     pavucontrol
 
     unstable.gh
