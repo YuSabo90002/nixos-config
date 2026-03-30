@@ -27,4 +27,6 @@
   };
 
   services.resolved.enable = true;
+
+  networking.firewall.allowedTCPPorts = [ 1420 1421 ];
 }
