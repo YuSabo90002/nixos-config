@@ -39,11 +39,6 @@
       inputs.astal.follows = "astal";
     };
 
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
     };
