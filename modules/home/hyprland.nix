@@ -359,11 +359,6 @@ in {
           on-timeout = "loginctl lock-session";
           on-resume = "";
         }
-        {
-          timeout = 900;
-          on-timeout = "systemctl suspend";
-          on-resume = "";
-        }
       ];
     };
   };
