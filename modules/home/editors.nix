@@ -110,6 +110,7 @@
       ];
       userSettings = {
         "claudeCode.preferredLocation" = "panel";
+        "claudeCode.useTerminal" = true;
         "claudeCode.claudeProcessWrapper" = "${pkgs.llm-agents.claude-code}/bin/claude";
       };
     };
