@@ -43,6 +43,7 @@ in {
 
   # システムパッケージ
   environment.systemPackages = with pkgs; [
+    bubblewrap
     git
     wget
   ];
