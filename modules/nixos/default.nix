@@ -41,9 +41,14 @@ in {
     extraConfig = "font-size=16";
   };
 
+  # claude-code-seccomp の share/ をシステムプロファイルに含める
+  environment.pathsToLink = [ "/share/claude-code-seccomp" ];
+
   # システムパッケージ
   environment.systemPackages = with pkgs; [
     bubblewrap
+    socat
+    (callPackage ../../packages/claude-code-seccomp {})
     git
     wget
   ];

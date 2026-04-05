@@ -1,4 +1,7 @@
-{ pkgs, inputs, config, ... }: {
+{ pkgs, inputs, config, ... }:
+let
+  claude-code-seccomp = pkgs.callPackage ../../packages/claude-code-seccomp {};
+in {
   imports = [
     inputs.ags.homeManagerModules.default
     ./hyprland.nix
@@ -87,6 +90,13 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
+
+  # Claude Code sandbox: seccompバイナリをnpmグローバル探索パスに配置
+  # Claude Codeがsettings.jsonのパスを読まないバグの回避策
+  home.file.".npm/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/seccomp/x64/apply-seccomp".source =
+    "${claude-code-seccomp}/bin/apply-seccomp";
+  home.file.".npm/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/seccomp/x64/unix-block.bpf".source =
+    "${claude-code-seccomp}/share/claude-code-seccomp/unix-block.bpf";
 
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
