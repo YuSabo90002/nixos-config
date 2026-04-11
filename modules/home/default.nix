@@ -41,7 +41,15 @@ in {
     drawio
     unstable.ouch
 
-    unstable.lutris
+    (unstable.lutris.override {
+      extraPkgs = p: with p; [
+        wineWowPackages.staging
+        winetricks
+        gamescope
+        mangohud
+        gamemode
+      ];
+    })
   ];
 
   programs.ags = {
