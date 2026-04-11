@@ -39,6 +39,7 @@ in {
     unstable.volta
     nmap
     drawio
+    unstable.ouch
 
     unstable.lutris
   ];
