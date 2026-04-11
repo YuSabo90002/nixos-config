@@ -43,7 +43,7 @@ in {
 
     (unstable.lutris.override {
       extraPkgs = p: with p; [
-        wineWowPackages.staging
+        wineWow64Packages.staging
         winetricks
         gamescope
         mangohud
