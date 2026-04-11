@@ -39,6 +39,8 @@ in {
     unstable.volta
     nmap
     drawio
+
+    unstable.lutris
   ];
 
   programs.ags = {
