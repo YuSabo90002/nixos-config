@@ -48,6 +48,7 @@ in {
         gamescope
         mangohud
         gamemode
+        vulkan-tools
       ];
     })
   ];
