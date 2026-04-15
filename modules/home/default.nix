@@ -1,6 +1,9 @@
 { pkgs, inputs, config, ... }:
 let
-  claude-code-seccomp = pkgs.callPackage ../../packages/claude-code-seccomp {};
+  inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system})
+    claude-code-seccomp
+    dmux
+    ;
 in {
   imports = [
     inputs.ags.homeManagerModules.default
@@ -31,6 +34,7 @@ in {
     wl-clipboard
 
     llm-agents.claude-code
+    dmux
     unstable.discord
     unstable.pear-desktop
     pavucontrol
