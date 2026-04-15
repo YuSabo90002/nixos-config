@@ -1,7 +1,6 @@
 { pkgs, ... }: {
   programs.tmux = {
     enable = true;
-    shell = "${pkgs.nushell}/bin/nu";
     terminal = "tmux-256color";
     prefix = "C-a";
     escapeTime = 0;
