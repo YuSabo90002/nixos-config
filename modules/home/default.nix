@@ -24,6 +24,7 @@ in {
     chromium
     ripgrep
     fd
+    jq
     btop
     grim
     slurp
