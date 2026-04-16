@@ -2,7 +2,6 @@
 let
   inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system})
     claude-code-seccomp
-    dmux
     ;
 in {
   imports = [
@@ -34,7 +33,6 @@ in {
     wl-clipboard
 
     llm-agents.claude-code
-    dmux
     unstable.discord
     unstable.pear-desktop
     pavucontrol
