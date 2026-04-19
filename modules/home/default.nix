@@ -54,6 +54,8 @@ in {
         vulkan-tools
       ];
     })
+
+    unstable.prismlauncher
   ];
 
   programs.ags = {
