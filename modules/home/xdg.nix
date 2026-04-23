@@ -1,4 +1,27 @@
 { ... }: {
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      # ファイルマネージャ
+      "inode/directory" = "org.gnome.Nautilus.desktop";
+
+      # ブラウザ (Zen Twilight)
+      "x-scheme-handler/http" = "zen-twilight.desktop";
+      "x-scheme-handler/https" = "zen-twilight.desktop";
+      "x-scheme-handler/chrome" = "zen-twilight.desktop";
+      "text/html" = "zen-twilight.desktop";
+      "application/x-extension-htm" = "zen-twilight.desktop";
+      "application/x-extension-html" = "zen-twilight.desktop";
+      "application/x-extension-shtml" = "zen-twilight.desktop";
+      "application/xhtml+xml" = "zen-twilight.desktop";
+      "application/x-extension-xhtml" = "zen-twilight.desktop";
+      "application/x-extension-xht" = "zen-twilight.desktop";
+
+      # Claude Code URL ハンドラ
+      "x-scheme-handler/claude-cli" = "claude-code-url-handler.desktop";
+    };
+  };
+
   xdg.userDirs = {
     enable = true;
     createDirectories = true;

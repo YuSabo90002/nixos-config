@@ -56,6 +56,8 @@ in {
     })
 
     unstable.prismlauncher
+
+    nautilus
   ];
 
   programs.ags = {

@@ -79,6 +79,10 @@ in
     pulse.enable = true;
   };
 
+  # nautilus 用: ゴミ箱・ネットワークマウント (gvfs) とサムネイル (tumbler)
+  services.gvfs.enable = true;
+  services.tumbler.enable = true;
+
   xdg.portal = {
     enable = true;
     extraPortals = [

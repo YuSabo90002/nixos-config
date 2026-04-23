@@ -36,7 +36,7 @@
     # Treesitter
     plugins.treesitter = {
       enable = true;
-      settings.highlight.enable = true;
+      highlight.enable = true;
     };
 
     # Telescope（ファイル検索・grep）
