@@ -112,6 +112,16 @@
         "claudeCode.preferredLocation" = "panel";
         "claudeCode.claudeProcessWrapper" = "${pkgs.llm-agents.claude-code}/bin/claude";
         "claudeCode.allowDangerouslySkipPermissions" = true;
+
+        # 統合ターミナルの bash を bashInteractive に固定する。
+        # 親プロセス（nushell 等）の PATH を継承して devShell の素 bash を拾うと
+        # readline 無しのため PS1 の `\[\]` が崩れるのを防ぐ。
+        "terminal.integrated.profiles.linux" = {
+          bash = {
+            path = "${pkgs.bashInteractive}/bin/bash";
+          };
+        };
+        "terminal.integrated.defaultProfile.linux" = "bash";
       };
     };
   };

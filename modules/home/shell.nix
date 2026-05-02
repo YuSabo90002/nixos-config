@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -19,6 +19,9 @@
       ll = "ls -l";
       la = "ls -a";
       lla = "ls -la";
+      # nix devShell の PATH には素の `bash`（readline 無し）が入り、
+      # PS1 の `\[\]` が解釈されず崩れるため、readline 付きを優先する
+      bash = "${pkgs.bashInteractive}/bin/bash";
     };
   };
 
