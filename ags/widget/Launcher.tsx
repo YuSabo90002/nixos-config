@@ -217,6 +217,9 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
   // 開閉制御
   launcherOpen.subscribe(() => {
     if (launcherOpen.peek()) {
+      // NixOS では /run/current-system の symlink 切替で AppInfoMonitor が
+      // 新エントリを取りこぼすことがあるため、表示前に明示的に再スキャンする
+      apps.reload()
       entry.set_text("")
       updateResults("")
       win.visible = true
