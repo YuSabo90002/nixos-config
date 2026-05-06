@@ -81,6 +81,13 @@ in
     pulse.enable = true;
   };
 
+  # Bluetooth (UI は AGS の StatusPanel から制御)
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General.Experimental = true;
+  };
+
   # nautilus 用: ゴミ箱・ネットワークマウント (gvfs) とサムネイル (tumbler)
   services.gvfs.enable = true;
   services.tumbler.enable = true;

@@ -6,6 +6,7 @@ import { exec, execAsync } from "ags/process"
 import Wp from "gi://AstalWp"
 import Mpris from "gi://AstalMpris"
 import Notifd from "gi://AstalNotifd"
+import BluetoothSection from "./BluetoothSection"
 
 const [panelOpen, setPanelOpen] = createState(false)
 
@@ -420,6 +421,7 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
         <MediaSection />
         <VolumeSection />
         <NetworkSection />
+        <BluetoothSection />
         <SystemSection />
         <TemperatureSection />
         <QuickToggles />

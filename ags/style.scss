@@ -423,6 +423,72 @@ window.StatusPanel {
 
 .cpu-color { color: $green; }
 .temp-color { color: $orange; }
+.bt-color { color: $blue; }
+
+// Bluetooth
+.bluetooth-section {
+  .panel-icon-btn.active {
+    color: $green;
+    background-color: rgba(166, 226, 46, 0.15);
+  }
+}
+
+.bt-device {
+  padding: 6px 4px;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+}
+
+.bt-device-icon {
+  color: $blue;
+  font-size: 14px;
+  min-width: 18px;
+}
+
+.bt-device-name {
+  color: $fg;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.bt-device-addr {
+  color: $fg-dim;
+  font-size: 10px;
+}
+
+.bt-action-btn {
+  background-color: transparent;
+  color: $fg-dim;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+
+  &:hover {
+    background-color: rgba(102, 217, 239, 0.15);
+    color: $blue;
+  }
+
+  &.connected {
+    color: $green;
+
+    &:hover {
+      background-color: rgba(166, 226, 46, 0.15);
+    }
+  }
+
+  &.danger:hover {
+    background-color: rgba(249, 38, 114, 0.15);
+    color: $red;
+  }
+
+  &:insensitive {
+    color: rgba(117, 113, 94, 0.4);
+  }
+}
 
 .temp-label {
   color: $fg-dim;
