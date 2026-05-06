@@ -104,11 +104,15 @@ in {
   };
 
   # AGSバー（UWSMセッションに連動）
+  # ags/ 以下のファイル変更時にユニットファイル内容が変わるよう、
+  # X-Restart-Triggers にディレクトリの store path を埋め込む。
+  # これで sd-switch が変更を検知して home-manager switch 時に自動再起動する。
   systemd.user.services.ags = {
     Unit = {
       Description = "AGS (Aylur's GTK Shell)";
       PartOf = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
+      X-Restart-Triggers = [ "${../../ags}" ];
     };
     Service = {
       ExecStart = "${config.programs.ags.finalPackage}/bin/ags run";
