@@ -1,12 +1,16 @@
 import { createState } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import { createPoll } from "ags/time"
+import { createPoll, timeout } from "ags/time"
 import { execAsync } from "ags/process"
 import GLib from "gi://GLib?version=2.0"
 import Gio from "gi://Gio?version=2.0"
 import Greet from "gi://AstalGreet?version=0.1"
 
-Gio._promisify(Greet, "login", "login_finish")
+// Greet.login() は auth_error 時に throw せず Error レスポンスを返したまま
+// 後続の StartSession を呼び、結果として AGS が compositor を exit させてしまう。
+// CreateSession → PostAuthMesssage → StartSession を自前で呼び、
+// 各 Response の型を判定して正しく失敗をハンドリングする。
+Gio._promisify(Greet.Request.prototype, "send", "send_finish")
 
 function formatTime(): string {
   const now = new Date()
@@ -36,15 +40,45 @@ export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
 
   let loggingIn = false
 
-  async function handleLogin(password: string, entry: Gtk.Entry) {
+  async function authenticate(password: string): Promise<void> {
+    let resp: any = await new Greet.CreateSession({ username }).send()
+    if (resp instanceof Greet.Error) {
+      throw new Error(resp.description || "セッション作成失敗")
+    }
+
+    if (resp instanceof Greet.AuthMessage) {
+      resp = await new Greet.PostAuthMesssage({ response: password }).send()
+    }
+    while (resp instanceof Greet.AuthMessage) {
+      // INFO/ERROR 等の追加メッセージには空応答で進める
+      resp = await new Greet.PostAuthMesssage({ response: "" }).send()
+    }
+
+    if (resp instanceof Greet.Error) {
+      try { await new Greet.CancelSession().send() } catch (_) {}
+      if (resp.errorType === Greet.ErrorType.AUTH_ERROR) {
+        throw new Error("パスワードが違います")
+      }
+      throw new Error(resp.description || "認証エラー")
+    }
+
+    const startResp: any = await new Greet.StartSession({ cmd: [sessionCmd], env: [] }).send()
+    if (startResp instanceof Greet.Error) {
+      try { await new Greet.CancelSession().send() } catch (_) {}
+      throw new Error(startResp.description || "セッション開始失敗")
+    }
+  }
+
+  async function handleLogin(password: string, entry: Gtk.Entry, overlay: Gtk.Overlay) {
     if (loggingIn) return
     loggingIn = true
     setError("")
+    overlay.remove_css_class("greeter-shake")
 
     printerr(`[greeter] login attempt: user=${username}, cmd=${sessionCmd}`)
 
     try {
-      await Greet.login(username, password, sessionCmd)
+      await authenticate(password)
       printerr("[greeter] login success, exiting compositor")
       execAsync("hyprctl dispatch exit")
     } catch (e: any) {
@@ -52,6 +86,11 @@ export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
       printerr(`[greeter] login error: ${msg}`)
       setError(msg)
       entry.set_text("")
+      // シェイク + 赤フラッシュ
+      overlay.add_css_class("greeter-shake")
+      timeout(450, () => {
+        overlay.remove_css_class("greeter-shake")
+      })
       entry.grab_focus()
       loggingIn = false
     }
@@ -112,7 +151,7 @@ export default function Greeter(gdkmonitor: Gdk.Monitor | null) {
     })
 
     entry.connect("activate", () => {
-      handleLogin(entry.get_text(), entry)
+      handleLogin(entry.get_text(), entry, overlay)
     })
 
     entry.connect("realize", () => {

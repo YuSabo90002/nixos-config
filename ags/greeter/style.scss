@@ -101,3 +101,25 @@ window.Greeter {
   font-weight: bold;
   margin-top: 12px;
 }
+
+// パスワードミス時の左右シェイク + 赤フラッシュ
+@keyframes greeter-shake {
+  0%   { margin-left: 0px; margin-right: 0px; }
+  15%  { margin-left: -10px; margin-right: 10px; }
+  30%  { margin-left: 10px; margin-right: -10px; }
+  45%  { margin-left: -8px; margin-right: 8px; }
+  60%  { margin-left: 8px; margin-right: -8px; }
+  75%  { margin-left: -4px; margin-right: 4px; }
+  100% { margin-left: 0px; margin-right: 0px; }
+}
+
+.greeter-shake {
+  animation: greeter-shake 0.45s ease-in-out;
+
+  .greeter-password-visible,
+  .greeter-password-hidden {
+    background-color: rgba(249, 38, 114, 0.25);
+    border: 3px solid rgba(249, 38, 114, 0.9);
+    opacity: 1;
+  }
+}
