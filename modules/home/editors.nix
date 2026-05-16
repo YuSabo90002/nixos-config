@@ -98,6 +98,53 @@
     };
   };
 
+  programs.zed-editor = {
+    enable = true;
+    package = pkgs.unstable.zed-editor;
+    extraPackages = [ pkgs.nixd pkgs.nixfmt-rfc-style ];
+
+    extensions = [ "nix" ];
+
+    userSettings = {
+      telemetry = {
+        diagnostics = false;
+        metrics = false;
+      };
+      vim_mode = false;
+      ui_font_size = 16;
+      buffer_font_size = 14;
+      buffer_font_family = "JetBrains Mono";
+      theme = {
+        mode = "dark";
+        dark = "One Dark";
+        light = "One Light";
+      };
+      terminal = {
+        shell = {
+          program = "${pkgs.bashInteractive}/bin/bash";
+        };
+      };
+      languages = {
+        Nix = {
+          language_servers = [ "nixd" ];
+          formatter = {
+            external = {
+              command = "nixfmt";
+              arguments = [ ];
+            };
+          };
+        };
+      };
+      lsp = {
+        nixd = {
+          binary = {
+            path = "${pkgs.nixd}/bin/nixd";
+          };
+        };
+      };
+    };
+  };
+
   programs.vscode = {
     enable = true;
     package = pkgs.unstable.vscode;
