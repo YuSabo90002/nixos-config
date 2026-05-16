@@ -2,8 +2,8 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      # ファイルマネージャ
-      "inode/directory" = "org.gnome.Nautilus.desktop";
+      # ファイルマネージャ: Alacritty で指定フォルダを開く
+      "inode/directory" = "alacritty-folder.desktop";
 
       # ブラウザ (Zen Twilight)
       "x-scheme-handler/http" = "zen-twilight.desktop";
@@ -31,6 +31,21 @@
     videos = "$HOME/Videos";
     music = "$HOME/Music";
     desktop = "$HOME/Desktop";
+  };
+
+  # xdg-open でフォルダを Alacritty で開くためのエントリ
+  xdg.desktopEntries.alacritty-folder = {
+    name = "Alacritty (Folder)";
+    comment = "Open a folder in Alacritty";
+    exec = "alacritty --working-directory %f";
+    icon = "Alacritty";
+    terminal = false;
+    type = "Application";
+    categories = [ "System" "TerminalEmulator" "Utility" ];
+    mimeType = [ "inode/directory" ];
+    settings = {
+      NoDisplay = "true";
+    };
   };
 
   # steamwebhelperがDRI_PRIME=1でクラッシュする問題の回避
