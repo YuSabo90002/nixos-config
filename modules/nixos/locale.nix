@@ -32,6 +32,7 @@
       nerd-fonts.jetbrains-mono
       hackgen-nf-font
       font-awesome
+      ipaexfont
     ];
     fontconfig = {
       defaultFonts = {
