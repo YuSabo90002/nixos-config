@@ -60,6 +60,10 @@ in
   # hyprlock用PAM認証
   security.pam.services.hyprlock = {};
 
+  # Secret Service API (VSCode 等が libsecret 経由で使う)
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   programs.steam = {
     enable = true;
     package = pkgs.unstable.steam;
