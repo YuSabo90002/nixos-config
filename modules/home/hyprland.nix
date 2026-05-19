@@ -87,7 +87,6 @@ in {
 
       # Dwindleレイアウト設定
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
         force_split = 2;
       };
