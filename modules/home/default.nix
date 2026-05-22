@@ -54,6 +54,7 @@ in {
         vulkan-tools
       ];
     })
+    unstable.gamescope
 
     unstable.prismlauncher
 
