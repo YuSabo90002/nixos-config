@@ -172,4 +172,15 @@
       };
     };
   };
+
+  # VSCode (Electron) は XDG_CURRENT_DESKTOP=Hyprland を未知のデスクトップと判定し、
+  # 使用するパスワードストアを自動選択できず「OSキーリングを識別できませんでした」
+  # 警告を出す。gnome-keyring の Secret Service は起動済みなので、明示的に
+  # gnome-libsecret を使うよう argv.json で指定する（home-manager の vscode
+  # モジュールは settings.json のみ管理し argv.json は触らないため home.file で管理）。
+  home.file.".vscode/argv.json".text = builtins.toJSON {
+    "enable-crash-reporter" = true;
+    "locale" = "ja";
+    "password-store" = "gnome-libsecret";
+  };
 }
