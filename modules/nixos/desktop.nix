@@ -38,6 +38,11 @@ in
     portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
   };
 
+  # Electron/Chromium アプリ (Discord・VSCode 等) を Wayland(ozone) で起動させる。
+  # XWayland 起動だと画面共有が xdg-desktop-portal を呼ばず、Discord の
+  # ウィンドウ共有ダイアログ (xdph ピッカー) が出なくなるため必須。
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   # グリーター: AGS v3 + astal-greet を Hyprland(stable) 上で起動
   services.greetd = {
     enable = true;
