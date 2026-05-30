@@ -12,15 +12,7 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = import ../../overlays { inherit inputs; };
 
-  # unstable Hyprlandに合わせてモジュールもunstableから取得
-  disabledModules = [
-    "programs/wayland/hyprland.nix"
-    "programs/wayland/uwsm.nix"
-  ];
-
   imports = [
-    "${inputs.nixpkgs-unstable}/nixos/modules/programs/wayland/hyprland.nix"
-    "${inputs.nixpkgs-unstable}/nixos/modules/programs/wayland/uwsm.nix"
     inputs.disko.nixosModules.disko
     inputs.agenix.nixosModules.default
     ../../modules/nixos
