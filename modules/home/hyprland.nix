@@ -22,6 +22,7 @@ let
 in {
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang"; # 26.05+ の新デフォルト lua ではなく従来の hyprlang を明示
     package = pkgs.unstable.hyprland; # NixOSモジュール側と同じunstable版を使用
     systemd.enable = false; # UWSMが管理するため無効化
     settings = {
@@ -364,6 +365,7 @@ in {
 
   services.hyprpaper = {
     enable = true;
+    package = pkgs.unstable.hyprpaper;
     settings = {
       splash = false;
       # hyprpaper 0.8.0+ はブロック構文。旧 `preload=` / `wallpaper=monitor,path`

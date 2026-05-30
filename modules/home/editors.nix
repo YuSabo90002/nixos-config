@@ -7,6 +7,10 @@
     enable = true;
     defaultEditor = true;
 
+    # nixvim 同梱の matched nixpkgs を明示。home-manager の pkgs (nixpkgs-unstable)
+    # と nixvim のバージョンがズレることによる source 警告を抑止する
+    nixpkgs.source = inputs.nixvim.inputs.nixpkgs;
+
     opts = {
       number = true;
       relativenumber = true;
@@ -101,7 +105,7 @@
   programs.zed-editor = {
     enable = true;
     package = pkgs.unstable.zed-editor;
-    extraPackages = [ pkgs.nixd pkgs.nixfmt-rfc-style ];
+    extraPackages = [ pkgs.nixd pkgs.nixfmt ];
 
     extensions = [ "nix" ];
 

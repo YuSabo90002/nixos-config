@@ -25,6 +25,7 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+    setSessionVariables = false; # 26.05+ の新デフォルト。XDG_*_DIR 環境変数は出さず user-dirs.dirs のみ生成
     documents = "$HOME/Documents";
     download = "$HOME/Downloads";
     pictures = "$HOME/Pictures";

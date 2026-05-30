@@ -24,8 +24,9 @@
     };
 
     nixvim = {
+      # nixpkgs を follows させると nixvim (26.11) と nixpkgs-unstable (26.05) の
+      # バージョン不整合警告が出るため、nixvim 同梱の matched nixpkgs を使わせる
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     astal = {
