@@ -365,13 +365,20 @@ in {
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [
-        "${splitWallpapers}/left.jpg"
-        "${splitWallpapers}/right.jpg"
-      ];
+      splash = false;
+      # hyprpaper 0.8.0+ はブロック構文。旧 `preload=` / `wallpaper=monitor,path`
+      # フラット構文は廃止され、起動時に黙殺される (「Monitor ... has no target」)。
       wallpaper = [
-        "DP-1,${splitWallpapers}/left.jpg"
-        "DP-2,${splitWallpapers}/right.jpg"
+        {
+          monitor = "DP-1";
+          path = "${splitWallpapers}/left.jpg";
+          fit_mode = "cover";
+        }
+        {
+          monitor = "DP-2";
+          path = "${splitWallpapers}/right.jpg";
+          fit_mode = "cover";
+        }
       ];
     };
   };
