@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libseccomp, glibc }:
 
 let
-  version = "0.0.49";
+  version = "0.0.52";
   src = fetchurl {
     url = "https://registry.npmjs.org/@anthropic-ai/sandbox-runtime/-/sandbox-runtime-${version}.tgz";
-    hash = "sha256-FbCDtQ+Ce3suSLVP7nHeZ7aJVDlA/vDISEP6EqGfTSo=";
+    hash = "sha256-Lga+cQ5N/5jTYtziXyG64Ub0dIVz9/vaXJ6PoVUoi1U=";
   };
 in
 stdenv.mkDerivation {
