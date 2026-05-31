@@ -56,12 +56,12 @@
 
     # グリーター用 (コミットハッシュ固定、nix flake updateで更新されない)
     ags-greeter = {
-      url = "github:aylur/ags/e169694390548dfd38ff40f1ef2163d6c3ffe3ea";
+      url = "github:aylur/ags/bbee2f18939f1ec7ff720e717cf305e73635628f";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.astal.follows = "astal-greeter";
     };
     astal-greeter = {
-      url = "github:aylur/astal/eb235f8813bdea2a4a38ac228f2efc4e2a8a90af";
+      url = "github:aylur/astal/d8738f97ed01f4d87f668df35fa7bbad795c9e49";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
