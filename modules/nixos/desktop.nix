@@ -66,6 +66,31 @@ in
   # hyprlock用PAM認証
   security.pam.services.hyprlock = {};
 
+  # polkit: GUIアプリの特権操作を action 単位で許可判定する。
+  # 認証エージェント本体は home-manager の services.hyprpolkitagent。
+  # ルールは extraConfig に JS で書くのが NixOS 正規の方法
+  # （security.polkit には構造化された rule オプションは存在せず、
+  #  rules.d/*.rules は mozjs で評価される JS ファイルそのものであるため）。
+  # wheel グループ（= yuta）に対し、以下を無認証で許可:
+  #   - udisks2 全般（USB/外部ドライブのマウント/アンマウント等）
+  #   - login1 の reboot/power-off/suspend（PowerMenu からの電源操作）
+  security.polkit.enable = true;
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (subject.isInGroup("wheel") && (
+          action.id.indexOf("org.freedesktop.udisks2.") === 0 ||
+          action.id == "org.freedesktop.login1.reboot" ||
+          action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+          action.id == "org.freedesktop.login1.power-off" ||
+          action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+          action.id == "org.freedesktop.login1.suspend" ||
+          action.id == "org.freedesktop.login1.suspend-multiple-sessions"
+      )) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
+
   # Secret Service API (VSCode 等が libsecret 経由で使う)
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;

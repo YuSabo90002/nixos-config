@@ -125,6 +125,15 @@ in {
     };
   };
 
+  # polkit認証エージェント（GUIアプリの権限昇格パスワードダイアログ用）。
+  # UWSMが起動するgraphical-session.targetに連動して自動起動する
+  # systemd user service を生成する（ags/hypridle と同パターン）。
+  # unstable hyprland と歩調を合わせて package も unstable を使う。
+  services.hyprpolkitagent = {
+    enable = true;
+    package = pkgs.unstable.hyprpolkitagent;
+  };
+
   # Claude Code sandbox: seccompバイナリをnpmグローバル探索パスに配置
   # Claude Codeがsettings.jsonのパスを読まないバグの回避策
   home.file.".npm/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/seccomp/x64/apply-seccomp".source =
