@@ -10,6 +10,14 @@
     # nixvim 同梱の matched nixpkgs を明示。home-manager の pkgs (nixpkgs-unstable)
     # と nixvim のバージョンがズレることによる source 警告を抑止する
     nixpkgs.source = inputs.nixvim.inputs.nixpkgs;
+    # host/buildPlatform を文字列で明示する。nixvim の HM ラッパーは既定で
+    # ホスト(home-manager=26.05)の elaborate 済みプラットフォーム
+    # (`pkgs.stdenv.{host,build}Platform`)を継承するが、それを nixvim 同梱
+    # nixpkgs(26.11)の lib.systems.elaborate に再投入すると、26.05 由来の属性に残る
+    # `linux-kernel`(26.11 で削除済み) で評価エラーになる。文字列を渡せば 26.11 側で
+    # 素から elaborate される。
+    nixpkgs.hostPlatform = "x86_64-linux";
+    nixpkgs.buildPlatform = "x86_64-linux";
 
     opts = {
       number = true;
