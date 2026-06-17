@@ -21,7 +21,6 @@ in {
   };
 
   home.packages = with pkgs; [
-    unstable.librewolf
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.twilight
     chromium
     ripgrep
