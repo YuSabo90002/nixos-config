@@ -154,6 +154,20 @@
           };
         };
       };
+
+      # Claude Code Agent (ACP) を NixOS で動かすための逃げ道。
+      # registry の ACP アダプタ @agentclientprotocol/claude-agent-acp は既定で
+      # @anthropic-ai/claude-agent-sdk 同梱の prebuilt ネイティブ claude バイナリを
+      # spawn するが、これは generic Linux 向けの動的リンク ELF で NixOS では起動できず
+      # (Could not start dynamically linked executable) 即終了 → exit 127 → 親が
+      # stdin に書いて EPIPE → 「Claude Code process exit with code 127」になる。
+      # アダプタは CLAUDE_CODE_EXECUTABLE を最優先で参照する (acp-agent.js: claudeCliPath)
+      # ため、env で autoPatchelf 済みの Nix 版 claude を指してこれを回避する。
+      # VSCode 拡張側の claudeCode.claudeProcessWrapper (下) と同じ対処を Zed 層で行う。
+      agent_servers."claude-acp" = {
+        type = "registry";
+        env.CLAUDE_CODE_EXECUTABLE = "${pkgs.llm-agents.claude-code}/bin/claude";
+      };
     };
   };
 
