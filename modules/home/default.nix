@@ -37,6 +37,7 @@ in {
     pavucontrol
 
     unstable.gh
+    python3
     unstable.uv
     unstable.volta
     nmap
