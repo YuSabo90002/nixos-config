@@ -17,6 +17,7 @@ in {
     ./networking.nix
     ./hardware-configuration.nix
     ./disko-config.nix
+    ./hori-wheel.nix
   ];
 
   # Nix設定
@@ -72,6 +73,7 @@ in {
     (callPackage ../../packages/claude-code-seccomp {})
     git
     wget
+    usbutils # lsusb 等
   ];
 
   # `sudo -A` 用 GUI パスワードプロンプト (fuzzel ベース、上の let を参照)。
