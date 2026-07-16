@@ -44,6 +44,11 @@
       url = "github:numtide/llm-agents.nix";
     };
 
+    # 複数コーディングエージェントを1ターミナルで多重化するPTYマルチプレクサ
+    herdr = {
+      url = "github:ogulcancelik/herdr";
+    };
+
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
