@@ -38,6 +38,7 @@ in {
     pavucontrol
 
     unstable.gh
+    nodejs
     python3
     unstable.uv
     unstable.volta
