@@ -17,6 +17,6 @@ in
     };
   })
   gnupgNoCheckOverlay
-  inputs.llm-agents.overlays.default
+  inputs.llm-agents.overlays.shared-nixpkgs
   inputs.nix-vscode-extensions.overlays.default
 ]
