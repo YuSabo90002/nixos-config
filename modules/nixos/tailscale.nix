@@ -11,6 +11,13 @@
     # 落ちなくなる。自分が exit node として「提供」する場合は "both" にして
     # `tailscale up --advertise-exit-node` を実行する。
     useRoutingFeatures = "client";
+
+    # Tailscale SSH。tailnet の ACL で認証するため authorized_keys の管理が不要。
+    # tailscaled が tailnet 側の 22 番を netstack で終端するので、通常の sshd は
+    # tailnet からは経由されず LAN/localhost 用のフォールバックとして残る。
+    # extraSetFlags は `tailscale set` を叩く tailscaled-set.service を生やす
+    # (extraUpFlags は authKeyFile 併用時しか効かないためこちらを使う)。
+    extraSetFlags = [ "--ssh" ];
   };
 
   # tailscale0 は TUN なので networking.nix の Type=ether/wlan にはマッチせず、

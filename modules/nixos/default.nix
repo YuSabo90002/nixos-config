@@ -87,7 +87,14 @@ in {
       PermitRootLogin = "no";
       PasswordAuthentication = false;
     };
+    # 全インタフェースで 22 を開けない。下の tailscale0 限定ルールで代替し、
+    # LAN/WAN 側からは接続不可にする。
+    openFirewall = false;
   };
+
+  # SSH は tailnet 内からのみ許可。tailscale が落ちると remote から入れなくなる
+  # 点は承知の上 (ローカル端末なのでコンソールから復旧できる)。
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   # Podman
   virtualisation.podman = {
