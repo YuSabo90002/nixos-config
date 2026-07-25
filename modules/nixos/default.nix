@@ -15,6 +15,7 @@ in {
     ./desktop.nix
     ./locale.nix
     ./networking.nix
+    ./tailscale.nix
     ./hardware-configuration.nix
     ./disko-config.nix
     ./hori-wheel.nix
