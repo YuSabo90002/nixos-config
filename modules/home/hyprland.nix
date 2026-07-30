@@ -24,6 +24,11 @@ in {
     enable = true;
     configType = "lua"; # 26.05+ の新デフォルト。設定本体は hypr/hyprland.lua に直書き
     package = pkgs.unstable.hyprland; # NixOSモジュール側と同じunstable版を使用
+    # 既定だとベース 26.05 の xdph に unstable の hyprland を注入した派生
+    # (finalPortalPackage = portalPackage.override { hyprland = finalPackage; })
+    # になりキャッシュに存在せず毎回ローカルビルド + NixOS 側の 1.4.0 と二重に入る。
+    # unstable を明示すると override が既定引数と同一になり NixOS 側と同じ派生に収束する。
+    portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
     systemd.enable = false; # UWSMが管理するため無効化
     settings = { }; # 構造化設定は使わない（中身は hyprland.lua へ）
     # 実 Lua ファイルを取り込む。extraConfig!="" により module が hyprland.lua を生成し
