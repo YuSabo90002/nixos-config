@@ -55,9 +55,18 @@
     plugins.telescope = {
       enable = true;
       keymaps = {
-        "<leader>ff" = { action = "find_files"; options.desc = "ファイル検索"; };
-        "<leader>fg" = { action = "live_grep"; options.desc = "テキスト検索"; };
-        "<leader>fb" = { action = "buffers"; options.desc = "バッファ一覧"; };
+        "<leader>ff" = {
+          action = "find_files";
+          options.desc = "ファイル検索";
+        };
+        "<leader>fg" = {
+          action = "live_grep";
+          options.desc = "テキスト検索";
+        };
+        "<leader>fb" = {
+          action = "buffers";
+          options.desc = "バッファ一覧";
+        };
       };
     };
 
@@ -67,7 +76,11 @@
       settings.view_options.show_hidden = true;
     };
     keymaps = [
-      { key = "-"; action = "<cmd>Oil<cr>"; options.desc = "ファイラーを開く"; }
+      {
+        key = "-";
+        action = "<cmd>Oil<cr>";
+        options.desc = "ファイラーを開く";
+      }
     ];
 
     # Nix LSP
@@ -113,9 +126,17 @@
   programs.zed-editor = {
     enable = true;
     package = pkgs.unstable.zed-editor;
-    extraPackages = [ pkgs.nixd pkgs.nixfmt ];
+    extraPackages = [
+      pkgs.nixd
+      pkgs.nixfmt
+      # 拡張が worktree.which("tinymist") で拾えるように PATH にも通す
+      pkgs.unstable.tinymist
+    ];
 
-    extensions = [ "nix" ];
+    extensions = [
+      "nix"
+      "typst"
+    ];
 
     userSettings = {
       telemetry = {
@@ -151,6 +172,18 @@
         nixd = {
           binary = {
             path = "${pkgs.nixd}/bin/nixd";
+          };
+        };
+
+        # Zed の typst 拡張は tinymist が見つからないと GitHub から prebuilt を
+        # ダウンロードするが、これは generic Linux 向けの動的リンク ELF なので
+        # NixOS では起動できない (Could not start dynamically linked executable)。
+        # 拡張は LspSettings の binary.path を最優先で参照するため、nixpkgs 版を
+        # 明示してダウンロード自体を回避する。unstable 側が拡張の要求する
+        # バージョンと一致している。
+        tinymist = {
+          binary = {
+            path = "${pkgs.unstable.tinymist}/bin/tinymist";
           };
         };
       };
