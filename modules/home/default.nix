@@ -32,6 +32,7 @@ in {
     wl-clipboard
 
     llm-agents.claude-code
+    llm-agents.claude-desktop
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     unstable.discord
     unstable.pear-desktop
