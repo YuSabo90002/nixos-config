@@ -116,6 +116,42 @@ in {
     };
   };
 
+  # PDF/DjVu/PS/コミックビューワ (キーボード駆動、装飾なし)
+  # 同梱プラグイン: pdf-mupdf, djvu, ps, cb
+  programs.zathura = {
+    enable = true;
+    options = {
+      # GUI 要素は全部隠す ("c"=コマンドライン "s"=ステータスバー "h"/"v"=スクロールバー)。
+      # `:` を押せばコマンドラインは一時的に出る
+      guioptions = "";
+      window-title-basename = true;
+      statusbar-basename = true;
+      render-loading = false;
+
+      # 既定で反転表示にする (Ctrl+r でトグル)。色は Alacritty と同じ Monokai
+      recolor = true;
+      recolor-keephue = true; # 図表の色相は保つ
+      recolor-lightcolor = "#272822";
+      recolor-darkcolor = "#F8F8F2";
+      default-bg = "#272822";
+      default-fg = "#F8F8F2";
+      statusbar-bg = "#272822";
+      statusbar-fg = "#F8F8F2";
+      inputbar-bg = "#272822";
+      inputbar-fg = "#F8F8F2";
+      highlight-color = "#F4BF75";
+      highlight-active-color = "#F92672";
+      font = "JetBrainsMono Nerd Font 11";
+
+      adjust-open = "width"; # 論文は横幅合わせのほうが読みやすい
+      scroll-page-aware = true;
+      selection-clipboard = "clipboard";
+      zoom-step = 10;
+    };
+    # キーバインドは既定の vim 風のまま (f=リンク follow, d=見開き, Ctrl+r=反転トグル,
+    # Ctrl+n=ステータスバー一時表示, Tab=目次)
+  };
+
   gtk = {
     enable = true;
     iconTheme = {

@@ -25,10 +25,43 @@ let
     "image/x-targa"
     "image/x-tga"
   ];
+
+  # ドキュメントビューワ: zathura。プラグインごとに .desktop が分かれている。
+  # 各 .desktop が申告する MimeType のうち、画像系 (mupdf の image/*) と
+  # 汎用アーカイブ・ディレクトリ (cb の application/zip, x-tar, inode/directory 等) は
+  # swayimg / ouch / ファイルマネージャの担当なので意図的に除いてある。
+  documentHandlers = {
+    "org.pwmt.zathura-pdf-mupdf.desktop" = [
+      "application/pdf"
+      "application/oxps"
+      "application/epub+zip"
+      "application/x-fictionbook"
+      "application/x-mobipocket-ebook"
+    ];
+    "org.pwmt.zathura-djvu.desktop" = [
+      "image/vnd.djvu"
+      "image/vnd.djvu+multipage"
+    ];
+    "org.pwmt.zathura-ps.desktop" = [
+      "application/postscript"
+      "application/eps"
+      "application/x-eps"
+      "image/eps"
+      "image/x-eps"
+    ];
+    "org.pwmt.zathura-cb.desktop" = [
+      "application/x-cbr"
+      "application/x-cbz"
+      "application/x-cb7"
+      "application/x-cbt"
+    ];
+  };
 in {
   xdg.mimeApps = {
     enable = true;
-    defaultApplications = lib.genAttrs imageMimeTypes (_: "swayimg.desktop") // {
+    defaultApplications = lib.genAttrs imageMimeTypes (_: "swayimg.desktop")
+      // lib.concatMapAttrs (desktop: mimes: lib.genAttrs mimes (_: desktop)) documentHandlers
+      // {
       # ファイルマネージャ: Alacritty で指定フォルダを開く
       "inode/directory" = "alacritty-folder.desktop";
 
