@@ -3,6 +3,9 @@ let
   inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system})
     claude-code-seccomp
     ;
+
+  # unfree のため autoWire に乗らず pkgs/ 側に置いてある (pkgs/README.md 参照)
+  moshi-hook = pkgs.callPackage ../../pkgs/moshi-hook { };
 in {
   imports = [
     inputs.ags.homeManagerModules.default
@@ -34,6 +37,9 @@ in {
     llm-agents.claude-code
     llm-agents.claude-desktop
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Moshi (iOS ターミナル) のホスト側ヘルパー。クライアントが SSH 越しに
+    # `command -v moshi-hook` で存在確認するので PATH に居る必要がある。
+    moshi-hook
     unstable.discord
     unstable.pear-desktop
     pavucontrol
@@ -114,6 +120,26 @@ in {
         "Shift+g" = "mode gallery";
       };
     };
+  };
+
+  # moshi-hook の常駐。エージェントの hook が叩く Unix socket を張り、
+  # 承認のやり取り用に Moshi へ WebSocket を維持する。
+  # 上流の `moshi-hook service install` は ~/.config/systemd/user に命令的に
+  # unit を書くので使わず、こちらで宣言的に持つ。
+  # ペアリング済みの秘密は ~/.local/state/moshi/secrets.json (0600) にあり、
+  # 実行時に書かれる可変状態なので home-manager の管理下には置かない。
+  systemd.user.services.moshi-hook = {
+    Unit = {
+      Description = "Moshi hook daemon (agent hook socket + Moshi WebSocket bridge)";
+      Documentation = "https://getmoshi.app/docs/hooks";
+      After = [ "network.target" ];
+    };
+    Service = {
+      ExecStart = "${moshi-hook}/bin/moshi-hook serve";
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install.WantedBy = [ "default.target" ];
   };
 
   # PDF/DjVu/PS/コミックビューワ (キーボード駆動、装飾なし)

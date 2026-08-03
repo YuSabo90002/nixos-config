@@ -10,5 +10,7 @@ autowire 側に無いため、ディレクトリを分けるのが唯一の逃�
 - `hori-truck-wheel` — 引数に `kernel` を取る。トップレベル `pkgs` には無く
   `linuxPackages` スコープにしかないので callPackage が埋められない。
   利用側は `config.boot.kernelPackages.callPackage` で呼ぶ。
+- `moshi-hook` — `meta.license = unfree`。フレーク側の pkgs には allowUnfree が
+  無いため弾かれる。利用側 (nixosConfigurations の pkgs) は allowUnfree = true。
 
 ここのパッケージは利用箇所から `pkgs.callPackage ../../pkgs/<名前> { }` で直接呼ぶ。
