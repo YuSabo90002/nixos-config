@@ -92,9 +92,30 @@ in {
     openFirewall = false;
   };
 
-  # SSH は tailnet 内からのみ許可。tailscale が落ちると remote から入れなくなる
-  # 点は承知の上 (ローカル端末なのでコンソールから復旧できる)。
-  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
+  # mosh。セッション確立は SSH 経由 (22) で、そこから UDP 60000-61000 に移る。
+  # モジュールの openFirewall は既定 true かつ全インタフェースに穴を開けるので、
+  # SSH と同じく tailnet 限定にするため明示的に切って下でインタフェース指定する。
+  #
+  # Tailscale SSH は netstack で 22 を終端するが $SSH_CONNECTION は素の sshd と
+  # 同様に埋まる。よって mosh 既定の --bind-server=ssh_connection がそのまま通り、
+  # mosh-server は tailscale IP に bind する (iPad から接続して確認済み)。
+  # --bind-server=any の回避策は不要。
+  programs.mosh = {
+    enable = true;
+    openFirewall = false;
+  };
+
+  # SSH / mosh は tailnet 内からのみ許可。tailscale が落ちると remote から
+  # 入れなくなる点は承知の上 (ローカル端末なのでコンソールから復旧できる)。
+  networking.firewall.interfaces.tailscale0 = {
+    allowedTCPPorts = [ 22 ];
+    allowedUDPPortRanges = [
+      {
+        from = 60000;
+        to = 61000;
+      }
+    ];
+  };
 
   # Podman
   virtualisation.podman = {
