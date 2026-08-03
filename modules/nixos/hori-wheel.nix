@@ -5,14 +5,14 @@
 # Slider も ABS_THROTTLE に割り当てようとして衝突し、その軸(=ブレーキ)を破棄する。
 # 結果 Linux ではブレーキだけ認識されない(アクセル/クラッチ/ステアは動く)。
 #
-# packages/hori-truck-wheel の out-of-tree カーネルモジュール(report_fixup)で
+# pkgs/hori-truck-wheel の out-of-tree カーネルモジュール(report_fixup)で
 # 2 つ目の Slider を Dial(0x37) に書き換え、別軸 ABS_RUDDER として露出させる。
 # 実機で ABS_RUDDER がブレーキ全域(0〜65535)に反応することを確認済み。
 # ゲーム側(ETS2 等)ではこの RUDDER 軸をブレーキに割り当てて使う。
 { config, ... }:
 {
   boot.extraModulePackages = [
-    (config.boot.kernelPackages.callPackage ../../packages/hori-truck-wheel { })
+    (config.boot.kernelPackages.callPackage ../../pkgs/hori-truck-wheel { })
   ];
   boot.kernelModules = [ "hori_truck_wheel" ];
 }
