@@ -1,7 +1,34 @@
-{ ... }: {
+{ lib, ... }:
+let
+  # 画像ビューワ: swayimg (swayimg.desktop の MimeType と同じ一覧)
+  imageMimeTypes = [
+    "image/avif"
+    "image/bmp"
+    "image/gif"
+    "image/heif"
+    "image/jpeg"
+    "image/jpg"
+    "image/jxl"
+    "image/pbm"
+    "image/pjpeg"
+    "image/png"
+    "image/svg+xml"
+    "image/tiff"
+    "image/webp"
+    "image/x-bmp"
+    "image/x-exr"
+    "image/x-png"
+    "image/x-portable-anymap"
+    "image/x-portable-bitmap"
+    "image/x-portable-graymap"
+    "image/x-portable-pixmap"
+    "image/x-targa"
+    "image/x-tga"
+  ];
+in {
   xdg.mimeApps = {
     enable = true;
-    defaultApplications = {
+    defaultApplications = lib.genAttrs imageMimeTypes (_: "swayimg.desktop") // {
       # ファイルマネージャ: Alacritty で指定フォルダを開く
       "inode/directory" = "alacritty-folder.desktop";
 

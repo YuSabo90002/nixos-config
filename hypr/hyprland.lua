@@ -182,6 +182,7 @@ hl.window_rule({ name = "steam-game",         match = { class = "^steam_app_" },
 hl.window_rule({ name = "discord-ws",         match = { class = "discord" },                        workspace = "10" })
 hl.window_rule({ name = "pear-desktop-ws",    match = { class = "com.github.th-ch.youtube-music" }, workspace = "10" })
 hl.window_rule({ name = "pip-float",          match = { title = "^(Picture-in-Picture)$" },         float = true, pin = true })
+hl.window_rule({ name = "swayimg-float",      match = { class = "^(swayimg)$" },                    float = true })
 
 -------------------
 ---- 自動起動 ----

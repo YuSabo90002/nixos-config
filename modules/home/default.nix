@@ -78,6 +78,44 @@ in {
     ];
   };
 
+  # 画像ビューワ (Wayland ネイティブ、装飾なし)
+  programs.swayimg = {
+    enable = true;
+    settings = {
+      general = {
+        mode = "viewer";
+        size = "image";   # 画像の実サイズにウィンドウを合わせる
+        decoration = "no";
+        app_id = "swayimg";
+      };
+
+      viewer = {
+        window = "#00000000"; # 背景は透過
+        scale = "optimal";
+        antialiasing = "mks13";
+      };
+
+      # 1 枚開いても同ディレクトリの画像を送れるようにする
+      list = {
+        all = "yes";
+        order = "numeric";
+      };
+
+      gallery = {
+        size = "200";
+        pstore = "yes"; # サムネイルを永続キャッシュ
+      };
+
+      # オーバーレイ表示は既定で消す (viewer 上で `i` でトグル)
+      info.show = "no";
+
+      "keys.viewer" = {
+        # gallery は Return、slideshow は s (既定どおり)
+        "Shift+g" = "mode gallery";
+      };
+    };
+  };
+
   gtk = {
     enable = true;
     iconTheme = {
