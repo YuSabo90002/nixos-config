@@ -47,6 +47,11 @@ in {
     optimise.automatic = true; # store の重複排除
   };
 
+  # home-manager が管理外の既存ファイルとぶつかったとき、失敗せず退避させる。
+  # 無いと「Existing file ... would be clobbered」で activation ごと落ちる。
+  # 手書きの dotfile が残っている環境を取り込むときに必ず踏む。
+  home-manager.backupFileExtension = "hm-bak";
+
   # ブートローダー
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
