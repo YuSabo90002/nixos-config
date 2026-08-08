@@ -136,5 +136,7 @@ in {
   zramSwap.enable = true;
   boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 180;
 
-  system.stateVersion = "25.11";
+  # stateVersion は「その環境を最初に構築した NixOS のバージョン」であって
+  # 上げてはいけない値。ホストごとに違うので mkDefault で上書き可能にする。
+  system.stateVersion = lib.mkDefault "25.11";
 }

@@ -23,7 +23,9 @@ in {
   home = {
     username = "yuta";
     homeDirectory = "/home/yuta";
-    stateVersion = "25.11";
+    # system.stateVersion と同様、ホームを最初に作った版に固定する値。
+    # ホストごとに違うので mkDefault で上書き可能にする。
+    stateVersion = lib.mkDefault "25.11";
   };
 
   home.packages = with pkgs; [
