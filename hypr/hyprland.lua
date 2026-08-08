@@ -63,6 +63,14 @@ hl.config({
         sensitivity        = 0,
         accel_profile      = "flat",
         numlock_by_default = false,
+
+        -- タッチパッドを持たないホストでは効かないのでそのまま共有してよい。
+        -- natural_scroll は好みが割れるところ (false で従来方向)。
+        touchpad = {
+            natural_scroll       = true,
+            tap_to_click         = true,
+            disable_while_typing = true,
+        },
     },
 
     misc = {
@@ -113,6 +121,17 @@ hl.bind(mod .. " + SHIFT + F",     hl.dsp.window.pin())
 -- スクリーンショット
 hl.bind(mod .. " + S",         hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("grim - | wl-copy"))
+
+-- メディア / 明るさキー
+-- locked = true でロック画面中も効かせる。repeating = true で押しっぱなしに追従。
+-- 該当キーを持たないホスト (Yuta-PC のデスクトップキーボード) では発火しないので
+-- そのまま共有してよい。明るさは brightnessctl (modules/nixos/laptop.nix) を使う。
+hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),        { locked = true, repeating = true })
+hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),       { locked = true })
+hl.bind("XF86AudioMicMute",      hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),     { locked = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl set 5%+"),                            { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"),                            { locked = true, repeating = true })
 
 -- ワークスペース切替 / ウィンドウ移動 (1-10)
 for i = 1, 10 do
