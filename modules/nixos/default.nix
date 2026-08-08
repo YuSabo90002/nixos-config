@@ -129,9 +129,12 @@ in {
     nix-direnv.enable = true;
   };
 
-  # zram swap
+  # zram swap。180 は「圧縮メモリへの swap はページキャッシュ回収より安い」という
+  # zram 前提の値なので、実ディスクの swap パーティションを持つホストでは効きすぎる
+  # (zram を使い切った後に遅いディスクへ積極的に swap しに行く)。
+  # そういうホストが下げられるよう mkDefault にしておく。
   zramSwap.enable = true;
-  boot.kernel.sysctl."vm.swappiness" = 180;
+  boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 180;
 
   system.stateVersion = "25.11";
 }
