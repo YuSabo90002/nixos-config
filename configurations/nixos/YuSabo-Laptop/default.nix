@@ -37,8 +37,15 @@ in
 
   networking.hostName = "YuSabo-Laptop";
 
-  # 持ち出す機体なので IPv6 は殺さない (自宅固有の抑制は Yuta-PC だけ)
+  # 持ち出す機体なので IPv6 は全面的には殺さない。ただし自宅の回線だけは
+  # NTT 網内 IPv6 (240b::/20) が RA で降ってきて外へ疎通しないため、その SSID に
+  # 繋いでいるときだけ抑制する。
   my.suppressIPv6 = false;
+  my.suppressIPv6OnSSIDs = [
+    "Buffalo-17B8"
+    "Buffalo-A-17B8"
+    "Buffalo-G-17B8"
+  ];
 
   # 内蔵パネル 1 枚。workspaces は敢えて空にしてある。1 画面のホストで
   # 全ワークスペースを内蔵パネルに固定すると、外部ディスプレイを挿しても
