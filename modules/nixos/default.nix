@@ -11,14 +11,13 @@ let
       --prompt "''${SUDO_PROMPT:-sudo password: }"
   '';
 in {
+  # ホスト固有のもの (hardware / disko / 周辺機器) はここではなく
+  # configurations/nixos/<ホスト名>/ 側から import する。
   imports = [
     ./desktop.nix
     ./locale.nix
     ./networking.nix
     ./tailscale.nix
-    ./hardware-configuration.nix
-    ./disko-config.nix
-    ./hori-wheel.nix
   ];
 
   # Nix設定

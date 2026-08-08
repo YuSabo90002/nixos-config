@@ -10,12 +10,17 @@ in
 {
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = import ../../overlays { inherit inputs; };
+  nixpkgs.overlays = import ../../../overlays { inherit inputs; };
 
   imports = [
     inputs.disko.nixosModules.disko
     inputs.agenix.nixosModules.default
-    ../../modules/nixos
+    ../../../modules/nixos
+
+    # このホスト固有
+    ./hardware.nix
+    ./disko.nix
+    ../../../modules/nixos/hori-wheel.nix # HORI トラックホイール (デスクトップのみ)
   ];
 
   # home-manager
@@ -34,7 +39,7 @@ in
   ];
   age.secrets = {
     yuta-password = {
-      file = ../../secrets/yuta-password.age;
+      file = ../../../secrets/yuta-password.age;
     };
   };
 
