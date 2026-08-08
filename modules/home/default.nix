@@ -1,5 +1,8 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, inputs, config, lib, osConfig, ... }:
 let
+  # AGS に主モニターのコネクタ名を渡す (ags/app.tsx の MAIN_MONITOR)。
+  primaryMonitor = (lib.head (lib.filter (m: m.primary) osConfig.my.monitors)).output;
+
   inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system})
     claude-code-seccomp
     ;
@@ -219,6 +222,7 @@ in {
       X-Restart-Triggers = [ "${../../ags}" ];
     };
     Service = {
+      Environment = [ "PRIMARY_MONITOR=${primaryMonitor}" ];
       ExecStart = "${config.programs.ags.finalPackage}/bin/ags run";
       Restart = "on-failure";
       RestartSec = 3;

@@ -47,9 +47,9 @@ function BarContent(isMain: boolean, monitorName: string) {
   return overlay
 }
 
-export default function Bar(gdkmonitor: Gdk.Monitor) {
+// isMain は app.tsx が主モニター判定の結果を渡す (判定ロジックの二重持ちを避ける)。
+export default function Bar(gdkmonitor: Gdk.Monitor, isMain: boolean) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
-  const isMain = gdkmonitor.get_connector() === "DP-1"
 
   const win = (
     <window

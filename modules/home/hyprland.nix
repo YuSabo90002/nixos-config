@@ -1,23 +1,56 @@
-{ pkgs, ... }:
+{ pkgs, lib, osConfig, ... }:
 let
+  # モニター構成は NixOS 側の config.my.monitors (modules/nixos/monitors.nix) が
+  # 唯一の出どころ。ここでは hyprland / hyprpaper / hyprlock 向けに展開するだけ。
+  monitors = osConfig.my.monitors;
+  primary = lib.head (lib.filter (m: m.primary) monitors);
+
+  # 全モニターを囲む矩形。壁紙はこのサイズに引き伸ばしてから各モニターの
+  # 位置で切り出すことで、複数画面にまたがった 1 枚の絵になる。
+  # 1 画面のホストでは切り出しが画像全体と一致し、ただのリサイズに縮退する。
+  spanWidth = lib.foldl' (acc: m: lib.max acc (m.x + m.width)) 0 monitors;
+  spanHeight = lib.foldl' (acc: m: lib.max acc (m.y + m.height)) 0 monitors;
+  spanRes = "${toString spanWidth}x${toString spanHeight}";
+
   wallpaperSrc = builtins.fetchurl {
     url = "https://w.wallhaven.cc/full/9o/wallhaven-9o2rzk.jpg";
     sha256 = "02q56klyc5n7q1x3pxysc4dqj44k9rs4lwrcc5xdxpzjir3viqzs";
   };
 
-  # 二画面スパン壁紙: 元画像を各モニター解像度に合わせて分割
-  # DP-1: 2560x1440 (左), DP-2: 1920x1080 (右)
+  # モニターごとの壁紙。ファイル名はコネクタ名 (DP-1.jpg 等)。
   splitWallpapers = pkgs.runCommand "split-wallpapers" {
     nativeBuildInputs = [ pkgs.imagemagick ];
   } ''
     mkdir -p $out
-    # 元画像を4480x1440にリサイズ（中央クロップ）
-    magick ${wallpaperSrc} -resize 4480x1440^ \
-      -gravity center -extent 4480x1440 resized.jpg
-    # 左側: DP-1用 (2560x1440)
-    magick resized.jpg -crop 2560x1440+0+0 +repage $out/left.jpg
-    # 右側: DP-2用 (1920x1080, 上揃え)
-    magick resized.jpg -crop 1920x1080+2560+0 +repage $out/right.jpg
+    magick ${wallpaperSrc} -resize ${spanRes}^ \
+      -gravity center -extent ${spanRes} resized.jpg
+    ${lib.concatMapStringsSep "\n" (m:
+      "magick resized.jpg -crop ${toString m.width}x${toString m.height}+${toString m.x}+${toString m.y} +repage $out/${m.output}.jpg"
+    ) monitors}
+  '';
+
+  wallpaperFor = m: "${splitWallpapers}/${m.output}.jpg";
+
+  # hyprland.lua に前置するモニター定義とワークスペース割り当て。
+  # 静的な hypr/hyprland.lua からはこの 2 ブロックを外してある。
+  monitorLua = ''
+    ------------------
+    ---- モニター ----
+    ------------------
+    -- ホスト設定 (my.monitors) から生成。直接編集しないこと。
+    ${lib.concatMapStringsSep "\n" (m:
+      ''hl.monitor({ output = "${m.output}", mode = "${toString m.width}x${toString m.height}@${toString m.refresh}", position = "${toString m.x}x${toString m.y}", scale = ${toString m.scale} })''
+    ) monitors}
+
+    ------------------------------
+    ---- ワークスペース (モニタ別) ----
+    ------------------------------
+    ${lib.concatMapStringsSep "\n" (m:
+      lib.concatImapStringsSep "\n" (i: ws:
+        ''hl.workspace_rule({ workspace = "${toString ws}", monitor = "${m.output}"${lib.optionalString (i == 1) ", default = true"} })''
+      ) m.workspaces
+    ) monitors}
+
   '';
 in {
   wayland.windowManager.hyprland = {
@@ -33,7 +66,7 @@ in {
     settings = { }; # 構造化設定は使わない（中身は hyprland.lua へ）
     # 実 Lua ファイルを取り込む。extraConfig!="" により module が hyprland.lua を生成し
     # onChange=reloadConfig（hyprctl reload）が自動付与される。
-    extraConfig = builtins.readFile ../../hypr/hyprland.lua;
+    extraConfig = monitorLua + builtins.readFile ../../hypr/hyprland.lua;
   };
 
   # hyprlock: ロック画面
@@ -48,7 +81,7 @@ in {
       };
 
       background = {
-        path = "${splitWallpapers}/left.jpg";
+        path = wallpaperFor primary;
         blur_passes = 3;
         blur_size = 7;
         brightness = 0.7;
@@ -56,7 +89,7 @@ in {
       };
 
       input-field = {
-        monitor = "DP-1";
+        monitor = primary.output;
         size = "300, 50";
         outline_thickness = 3;
         dots_size = 0.2;
@@ -75,7 +108,7 @@ in {
 
       label = [
         {
-          monitor = "DP-1";
+          monitor = primary.output;
           text = "$TIME";
           color = "rgba(248, 248, 242, 1)";
           font_size = 64;
@@ -85,7 +118,7 @@ in {
           valign = "center";
         }
         {
-          monitor = "DP-1";
+          monitor = primary.output;
           text = "cmd[60000] date +'%m/%d (%a)'";
           color = "rgba(117, 113, 94, 1)";
           font_size = 20;
@@ -126,18 +159,11 @@ in {
       splash = false;
       # hyprpaper 0.8.0+ はブロック構文。旧 `preload=` / `wallpaper=monitor,path`
       # フラット構文は廃止され、起動時に黙殺される (「Monitor ... has no target」)。
-      wallpaper = [
-        {
-          monitor = "DP-1";
-          path = "${splitWallpapers}/left.jpg";
-          fit_mode = "cover";
-        }
-        {
-          monitor = "DP-2";
-          path = "${splitWallpapers}/right.jpg";
-          fit_mode = "cover";
-        }
-      ];
+      wallpaper = map (m: {
+        monitor = m.output;
+        path = wallpaperFor m;
+        fit_mode = "cover";
+      }) monitors;
     };
   };
 }

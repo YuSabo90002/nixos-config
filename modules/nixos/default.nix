@@ -16,6 +16,7 @@ in {
   imports = [
     ./desktop.nix
     ./locale.nix
+    ./monitors.nix
     ./networking.nix
     ./tailscale.nix
   ];

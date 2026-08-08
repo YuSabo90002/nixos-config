@@ -7,6 +7,7 @@ import CalendarPopup from "./widget/CalendarPopup"
 import NotificationPopups from "./widget/NotificationPopups"
 import Launcher, { toggleLauncher } from "./widget/Launcher"
 import Hyprland from "gi://AstalHyprland"
+import GLib from "gi://GLib"
 
 const settings = Gtk.Settings.get_default()!
 settings.gtkApplicationPreferDarkTheme = true
@@ -30,7 +31,10 @@ app.start({
   main() {
     const hyprland = Hyprland.get_default()
 
-    const MAIN_MONITOR = "DP-1"
+    // 主モニターのコネクタ名。ホスト設定 (my.monitors の primary = true) から
+    // systemd ユニットの PRIMARY_MONITOR 経由で渡る。素の `ags run` で起動した
+    // ときは未設定になるので、Hyprland が返す先頭のモニターで代用する。
+    const MAIN_MONITOR = GLib.getenv("PRIMARY_MONITOR") ?? hyprland.monitors[0]?.name ?? ""
 
     // モニター名でバーを管理（Hyprland IDはGDKインデックスと一致しない場合がある）
     const bars = new Map<string, Gtk.Widget>()
@@ -41,7 +45,7 @@ app.start({
       if (!bars.has(monitor.name)) {
         const gdkMon = findGdkMonitor(monitor.name)
         if (gdkMon) {
-          bars.set(monitor.name, Bar(gdkMon))
+          bars.set(monitor.name, Bar(gdkMon, monitor.name === MAIN_MONITOR))
           if (!calendars.has(monitor.name)) {
             calendars.set(monitor.name, CalendarPopup(gdkMon))
           }

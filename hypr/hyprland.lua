@@ -9,11 +9,8 @@ local mod      = "SUPER"
 local terminal = "alacritty"
 local menu     = "ags request -i yuta-shell toggle-launcher"
 
-------------------
----- モニター ----
-------------------
-hl.monitor({ output = "DP-1", mode = "2560x1440@60", position = "0x0",    scale = 1 })
-hl.monitor({ output = "DP-2", mode = "1920x1080@60", position = "2560x0", scale = 1 })
+-- モニター定義とワークスペース割り当ては、このファイルの手前に
+-- modules/home/hyprland.nix がホスト設定 (my.monitors) から生成して連結する。
 
 -----------------------
 ---- LOOK & FEEL ----
@@ -94,20 +91,6 @@ hl.animation({ leaf = "fade",        enabled = true, speed = 3,  bezier = "easeO
 hl.animation({ leaf = "workspaces",  enabled = true, speed = 4,  bezier = "easeInOutCubic", style = "slide" })
 hl.animation({ leaf = "border",      enabled = true, speed = 5,  bezier = "easeOutQuint" })
 hl.animation({ leaf = "borderangle", enabled = true, speed = 30, bezier = "linear",         style = "loop" })
-
-------------------------------
----- ワークスペース (モニタ別) ----
-------------------------------
-hl.workspace_rule({ workspace = "1",  monitor = "DP-1", default = true })
-hl.workspace_rule({ workspace = "2",  monitor = "DP-2", default = true })
-hl.workspace_rule({ workspace = "3",  monitor = "DP-1" })
-hl.workspace_rule({ workspace = "4",  monitor = "DP-2" })
-hl.workspace_rule({ workspace = "5",  monitor = "DP-1" })
-hl.workspace_rule({ workspace = "6",  monitor = "DP-2" })
-hl.workspace_rule({ workspace = "7",  monitor = "DP-1" })
-hl.workspace_rule({ workspace = "8",  monitor = "DP-2" })
-hl.workspace_rule({ workspace = "9",  monitor = "DP-1" })
-hl.workspace_rule({ workspace = "10", monitor = "DP-2" })
 
 ---------------------
 ---- キーバインド ----

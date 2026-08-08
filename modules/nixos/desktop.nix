@@ -1,20 +1,29 @@
-{ pkgs, lib, flake, ... }:
+{ config, pkgs, lib, flake, ... }:
 let
   inherit (flake) inputs;
   system = pkgs.stdenv.hostPlatform.system;
+
+  # モニター構成は config.my.monitors (modules/nixos/monitors.nix) が唯一の出どころ。
+  primary = lib.head (lib.filter (m: m.primary) config.my.monitors);
+  primaryRes = "${toString primary.width}x${toString primary.height}";
+
+  # greetd 用 Hyprland の monitor 行
+  greeterMonitorLines = lib.concatMapStringsSep "\n" (m:
+    "monitor = ${m.output}, ${toString m.width}x${toString m.height}@${toString m.refresh}, ${toString m.x}x${toString m.y}, ${toString m.scale}"
+  ) config.my.monitors;
 
   wallpaperSrc = builtins.fetchurl {
     url = "https://w.wallhaven.cc/full/9o/wallhaven-9o2rzk.jpg";
     sha256 = "02q56klyc5n7q1x3pxysc4dqj44k9rs4lwrcc5xdxpzjir3viqzs";
   };
 
-  # hyprlock風にブラー＋減光した壁紙を事前生成
+  # hyprlock風にブラー＋減光した壁紙を事前生成 (主画面の解像度に合わせる)
   blurredWallpaper = pkgs.runCommand "greeter-wallpaper" {
     nativeBuildInputs = [ pkgs.imagemagick ];
   } ''
     mkdir -p $out
     magick ${wallpaperSrc} \
-      -resize 2560x1440^ -gravity center -extent 2560x1440 \
+      -resize ${primaryRes}^ -gravity center -extent ${primaryRes} \
       -blur 0x21 -modulate 70 \
       $out/wallpaper.jpg
   '';
@@ -51,9 +60,9 @@ in
   };
 
   environment.etc."greetd/hyprland.conf".text = ''
-    monitor = DP-1, 2560x1440@60, 0x0, 1
-    monitor = DP-2, 1920x1080@60, 2560x0, 1
+    ${greeterMonitorLines}
     env = GREETER_SESSION_CMD,${sessionScript}
+    env = PRIMARY_MONITOR,${primary.output}
     exec-once = ${pkgs.swaybg}/bin/swaybg -i ${blurredWallpaper}/wallpaper.jpg -m fill
     exec-once = ${greeterAgs}/bin/ags run -d ${../../ags/greeter}; ${pkgs.hyprland}/bin/hyprctl dispatch exit
     misc {
@@ -102,7 +111,9 @@ in
     remotePlay.openFirewall = true;
   };
 
-  # AMD GPU
+  # GPU。中身は mesa なので AMD/Intel どちらでもこのまま使える
+  # (ベンダ固有なのは hardware.nix 側の microcode と kvm-* モジュール)。
+  # enable32Bit は Steam 用。
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
