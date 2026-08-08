@@ -127,6 +127,10 @@ in
     pulse.enable = true;
   };
 
+  # PipeWire にリアルタイム優先度を取らせる。無いと負荷時に xrun が増えて
+  # 音が途切れる。services.pipewire は rtkit を自動で有効にしないので明示する。
+  security.rtkit.enable = true;
+
   # Bluetooth (UI は AGS の StatusPanel から制御)
   hardware.bluetooth = {
     enable = true;
