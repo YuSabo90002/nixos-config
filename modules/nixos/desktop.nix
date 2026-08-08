@@ -8,7 +8,10 @@ let
   primaryRes = "${toString primary.width}x${toString primary.height}";
 
   # greetd 用 Hyprland の monitor 行
-  greeterMonitorLines = lib.concatMapStringsSep "\n" (m:
+  # 先頭のキャッチオールが無いと、外部ディスプレイだけ繋いだ状態 (蓋を閉じた
+  # ドッキング運用など) でログイン画面がどこにも出ない。同じ出力に複数当たると
+  # 後の方が勝つので、キャッチオールは明示指定より前に置く。
+  greeterMonitorLines = "monitor = , preferred, auto, auto\n" + lib.concatMapStringsSep "\n" (m:
     "monitor = ${m.output}, ${toString m.width}x${toString m.height}@${toString m.refresh}, ${toString m.x}x${toString m.y}, ${toString m.scale}"
   ) config.my.monitors;
 

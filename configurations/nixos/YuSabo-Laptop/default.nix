@@ -40,14 +40,16 @@ in
   # 持ち出す機体なので IPv6 は殺さない (自宅固有の抑制は Yuta-PC だけ)
   my.suppressIPv6 = false;
 
-  # 内蔵パネル 1 枚。全ワークスペースをここに割り当てる。
+  # 内蔵パネル 1 枚。workspaces は敢えて空にしてある。1 画面のホストで
+  # 全ワークスペースを内蔵パネルに固定すると、外部ディスプレイを挿しても
+  # そこへ持っていけるワークスペースが無くなるため。
+  # 未定義の出力はキャッチオール規則 (modules/home/hyprland.nix) で拾う。
   my.monitors = [
     {
       output = "eDP-1";
       width = 1920;
       height = 1080;
       primary = true;
-      workspaces = [ 1 2 3 4 5 6 7 8 9 10 ];
     }
   ];
 

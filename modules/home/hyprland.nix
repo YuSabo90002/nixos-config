@@ -31,6 +31,11 @@ let
 
   wallpaperFor = m: "${splitWallpapers}/${m.output}.jpg";
 
+  # ワークスペースをモニターに固定するのは複数画面を並べるホストでのみ意味がある。
+  # 1 画面のホストで固定すると、外部ディスプレイを挿しても、そこへ持っていける
+  # ワークスペースが 1 つも無くなる (= 外部出力が実質使えない) ので出さない。
+  anyWorkspacePinning = lib.any (m: m.workspaces != [ ]) monitors;
+
   # hyprland.lua に前置するモニター定義とワークスペース割り当て。
   # 静的な hypr/hyprland.lua からはこの 2 ブロックを外してある。
   monitorLua = ''
@@ -38,9 +43,17 @@ let
     ---- モニター ----
     ------------------
     -- ホスト設定 (my.monitors) から生成。直接編集しないこと。
+
+    -- 未定義の出力 (外部ディスプレイ・プロジェクタ等) のキャッチオール。
+    -- output = "" は hyprland 同梱の既定設定と同じ書き方。同じ出力に複数の規則が
+    -- 当たると後の方が勝つので、キャッチオールは必ず明示指定より前に置くこと
+    -- (後ろに置くと下の DP-1/DP-2 等の位置指定を潰してしまう)。
+    hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+
     ${lib.concatMapStringsSep "\n" (m:
       ''hl.monitor({ output = "${m.output}", mode = "${toString m.width}x${toString m.height}@${toString m.refresh}", position = "${toString m.x}x${toString m.y}", scale = ${toString m.scale} })''
     ) monitors}
+  '' + lib.optionalString anyWorkspacePinning ''
 
     ------------------------------
     ---- ワークスペース (モニタ別) ----
@@ -50,8 +63,7 @@ let
         ''hl.workspace_rule({ workspace = "${toString ws}", monitor = "${m.output}"${lib.optionalString (i == 1) ", default = true"} })''
       ) m.workspaces
     ) monitors}
-
-  '';
+  '' + "\n";
 in {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -163,7 +175,16 @@ in {
         monitor = m.output;
         path = wallpaperFor m;
         fit_mode = "cover";
-      }) monitors;
+      }) monitors ++ [
+        # 未定義の出力へのキャッチオール (hyprpaper は monitor 空文字を
+        # 「どのモニターにも当たらなかったとき」として扱う)。これが無いと
+        # 外部ディスプレイの背景が未設定のままになる。
+        {
+          monitor = "";
+          path = wallpaperFor primary;
+          fit_mode = "cover";
+        }
+      ];
     };
   };
 }
