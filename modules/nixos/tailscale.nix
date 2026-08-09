@@ -17,7 +17,12 @@
     # tailnet からは経由されず LAN/localhost 用のフォールバックとして残る。
     # extraSetFlags は `tailscale set` を叩く tailscaled-set.service を生やす
     # (extraUpFlags は authKeyFile 併用時しか効かないためこちらを使う)。
-    extraSetFlags = [ "--ssh" ];
+    #
+    # --operator は `tailscale up` / `down` を root 以外から叩けるようにする。
+    # AGS の StatusPanel から接続をトグルするために必要。指定したユーザーは
+    # tailscaled をほぼ全面的に操作できる (exit node 変更やログアウトも含む) が、
+    # yuta は wheel なので sudo で同じことができ、権限上の実質的な差はない。
+    extraSetFlags = [ "--ssh" "--operator=yuta" ];
   };
 
   # tailscale0 は TUN なので networking.nix の Type=ether/wlan にはマッチせず、

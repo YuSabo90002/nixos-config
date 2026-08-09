@@ -428,6 +428,44 @@ function MediaSection() {
   )
 }
 
+// --- Tailscale ---
+// BackendState は "Running" / "Stopped" / "NeedsLogin" / "NoState" 等。
+// up/down は modules/nixos/tailscale.nix の --operator=yuta によって root なしで
+// 叩ける。--peers=false は出力を 8KB から 3KB に落とすため (状態判定に peers は
+// 不要)。出力は状態が変わらない限り同一文字列なので、他の poll と同じく
+// 生の stdout を持ち回って各バインディングで解釈する (無変化なら通知も飛ばない)。
+const tsPoll = createPoll("", 3000, ["tailscale", "status", "--json", "--peers=false"])
+
+function tsState(out: string): { state: string; name: string } {
+  try {
+    const st = JSON.parse(out)
+    return {
+      state: st.BackendState ?? "NoState",
+      name: (st.Self?.DNSName ?? "").replace(/\.$/, ""),
+    }
+  } catch {
+    // 初回ポーリング前の空文字、または tailscaled が応答しない場合
+    return { state: "Unavailable", name: "" }
+  }
+}
+
+function tsTooltip(out: string): string {
+  const { state, name } = tsState(out)
+  switch (state) {
+    case "Running":
+      return name ? `Tailscale: 接続中\n${name}` : "Tailscale: 接続中"
+    case "Stopped":
+      return "Tailscale: 切断"
+    case "NeedsLogin":
+      // ブラウザでの認証が要る。URL を出す必要があるので端末側でやる。
+      return "Tailscale: 要ログイン (端末で tailscale up)"
+    case "Unavailable":
+      return "Tailscale: 応答なし"
+    default:
+      return `Tailscale: ${state}`
+  }
+}
+
 // --- クイック設定ボタン ---
 function QuickToggles() {
   const notifd = Notifd.get_default()
@@ -435,6 +473,26 @@ function QuickToggles() {
 
   return (
     <box cssClasses={["panel-section", "quick-toggles"]} spacing={8} homogeneous>
+      <button
+        cssClasses={tsPoll((o) =>
+          tsState(o).state === "Running" ? ["toggle-btn", "active"] : ["toggle-btn"]
+        )}
+        onClicked={() => {
+          const running = tsState(tsPoll.peek()).state === "Running"
+          execAsync(running ? "tailscale down" : "tailscale up")
+            .catch((err) => console.error(err))
+        }}
+        tooltipText={tsPoll(tsTooltip)}
+      >
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
+          <image iconName={tsPoll((o) =>
+            tsState(o).state === "Running"
+              ? "network-vpn-symbolic"
+              : "network-vpn-disabled-symbolic"
+          )} />
+          <label label="Tailscale" />
+        </box>
+      </button>
       <button
         cssClasses={dnd((d) => d ? ["toggle-btn", "active"] : ["toggle-btn"])}
         onClicked={() => { notifd.dontDisturb = !notifd.dontDisturb }}
