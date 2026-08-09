@@ -64,6 +64,12 @@ let
       ) m.workspaces
     ) monitors}
   '' + "\n";
+
+  # 指紋リーダーを持つホスト (= fprintd を有効にしたホスト) でだけロック解除に
+  # 指紋を使う。hyprlock は PAM ではなく fprintd を D-Bus で直接叩くため、
+  # NixOS 側では pam_fprintd を hyprlock から外してある
+  # (security.pam.services.hyprlock.fprintAuth = false, modules/nixos/laptop.nix)。
+  hasFingerprint = osConfig.services.fprintd.enable;
 in {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -140,6 +146,14 @@ in {
           valign = "center";
         }
       ];
+    } // lib.optionalAttrs hasFingerprint {
+      # メッセージは input-field の placeholder 位置に出る。hyprlock 既定の
+      # フォントは日本語グリフを持たないことがあるので英字にしておく。
+      auth.fingerprint = {
+        enabled = true;
+        ready_message = "Scan fingerprint to unlock";
+        present_message = "Scanning...";
+      };
     };
   };
 
@@ -159,6 +173,15 @@ in {
           timeout = 600;
           on-timeout = "loginctl lock-session";
           on-resume = "";
+        }
+        {
+          # ロックから 1 分後にパネルを消す。ノートではバックライトが最大の
+          # 電力食いなので、ロックだけして点けたままにしない。
+          # 復帰時の dpms on は general.after_sleep_cmd と重複しても害はない
+          # (既に on の状態で on を投げるのは no-op)。
+          timeout = 660;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
         }
       ];
     };

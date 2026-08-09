@@ -53,6 +53,22 @@ in
     }
   ];
 
+  # thermald は Intel 機の既定で入るが、この機体では使わない。ThinkPad は
+  # Lenovo DYTC (/sys/firmware/acpi/platform_profile と thinkpad_acpi の
+  # dytc_lapmode) でファームウェア側が熱制御を持っており、thermald はそれを
+  # 検出すると「Thermald can't run on this platform」と言って即終了する。
+  # 実際の熱・電力プロファイルは power-profiles-daemon が platform_profile
+  # ドライバ経由で DYTC を叩いて制御している (powerprofilesctl で確認済み)。
+  services.thermald.enable = false;
+
+  # 自宅では AC 挿しっぱなしで使う時間が長いので、満充電で保持し続けないよう
+  # 上限を 80% にする。持ち出しで容量が要るときの一時解除は
+  # modules/nixos/laptop.nix のオプション説明を参照。
+  my.batteryChargeThresholds = {
+    start = 75;
+    stop = 80;
+  };
+
   # zram に加えて 32G の実 swap パーティションがある。共有側の 180 は zram 前提の
   # 値で、そのままだと zram を使い切った後にディスクへ積極的に swap しに行く。
   boot.kernel.sysctl."vm.swappiness" = 60;
