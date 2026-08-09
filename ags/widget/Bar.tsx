@@ -3,6 +3,7 @@ import Workspaces from "./bar/Workspaces"
 import Clock from "./bar/Clock"
 import SysTray from "./bar/SysTray"
 import SystemMonitor from "./bar/SystemMonitor"
+import BatteryIndicator, { hasBattery } from "./bar/Battery"
 import { toggleStatusPanel, statusPanelOpen } from "./StatusPanel"
 
 function PanelToggleButton() {
@@ -29,6 +30,7 @@ function BarContent(isMain: boolean, monitorName: string) {
       </box>
       <box hexpand halign={Gtk.Align.END}>
         <SystemMonitor />
+        {hasBattery && <BatteryIndicator />}
         <SysTray />
         {isMain && <PanelToggleButton />}
       </box>

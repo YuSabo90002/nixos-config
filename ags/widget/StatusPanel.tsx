@@ -1,4 +1,4 @@
-import { createState, createBinding, With, type Accessor } from "ags"
+import { createState, createBinding, createComputed, With, type Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import { readFile } from "ags/file"
@@ -6,7 +6,9 @@ import { exec, execAsync } from "ags/process"
 import Wp from "gi://AstalWp"
 import Mpris from "gi://AstalMpris"
 import Notifd from "gi://AstalNotifd"
+import Brightness from "gi://AstalBrightness"
 import BluetoothSection from "./BluetoothSection"
+import { battery, hasBattery, stateText } from "./bar/Battery"
 
 const [panelOpen, setPanelOpen] = createState(false)
 
@@ -42,6 +44,80 @@ function VolumeSection() {
         cssClasses={["panel-value"]}
         label={createBinding(speaker, "volume")((v) => `${Math.round(v * 100)}%`)}
       />
+    </box>
+  )
+}
+
+// --- 明るさセクション ---
+// バックライトを持たないホスト (外部ディスプレイだけのデスクトップ) では
+// screen が null になるので、セクションごと出さない。
+const backlight = Brightness.get_default()?.screen ?? null
+export const hasBacklight = backlight !== null
+
+// スライダーを 0 まで引き切ると画面が真っ暗になり、GUI からは戻せなくなる
+// (輝度キーは効くが、それに気付ける状態ではない)。下限を設けて回避する。
+const MIN_BRIGHTNESS = 0.05
+
+function BrightnessSection() {
+  const dev = backlight!
+  // AstalBrightness の brightness は 0..1。生値は realBrightness / maxBrightness。
+  const value = createBinding(dev, "brightness")
+
+  return (
+    <box cssClasses={["panel-section", "brightness-section"]} spacing={8}>
+      <image cssClasses={["panel-icon-btn"]} iconName="display-brightness-symbolic" />
+      <slider
+        hexpand
+        cssClasses={["panel-slider", "brightness-slider"]}
+        value={value}
+        onChangeValue={(self) => {
+          dev.brightness = Math.max(MIN_BRIGHTNESS, self.get_value())
+        }}
+      />
+      <label
+        cssClasses={["panel-value"]}
+        label={value((v) => `${Math.round(v * 100)}%`)}
+      />
+    </box>
+  )
+}
+
+// --- バッテリーセクション ---
+function BatterySection() {
+  const bat = battery!
+
+  const percentage = createBinding(bat, "percentage")
+  const iconName = createBinding(bat, "batteryIconName")
+  const state = createBinding(bat, "state")
+  const timeToFull = createBinding(bat, "timeToFull")
+  const timeToEmpty = createBinding(bat, "timeToEmpty")
+  const energyRate = createBinding(bat, "energyRate")
+
+  const status = createComputed(() => {
+    const base = stateText(state(), timeToFull(), timeToEmpty())
+    const rate = energyRate()
+    return rate > 0 ? `${base} · ${rate.toFixed(1)} W` : base
+  })
+
+  return (
+    <box cssClasses={["panel-section", "battery-section"]} orientation={Gtk.Orientation.VERTICAL} spacing={8}>
+      <box spacing={8}>
+        <image iconName={iconName} />
+        <label halign={Gtk.Align.START} label="バッテリー" />
+        <label
+          hexpand
+          halign={Gtk.Align.END}
+          cssClasses={percentage((p) => {
+            const v = Math.round(p * 100)
+            if (v <= 15) return ["panel-value", "critical"]
+            if (v <= 30) return ["panel-value", "warning"]
+            return ["panel-value", "normal"]
+          })}
+          label={percentage((p) => `${Math.round(p * 100)}%`)}
+        />
+      </box>
+      <levelbar cssClasses={["panel-level", "battery-level"]} value={percentage} />
+      <label halign={Gtk.Align.START} cssClasses={["panel-status"]} label={status} />
     </box>
   )
 }
@@ -420,8 +496,10 @@ export default function StatusPanel(gdkmonitor: Gdk.Monitor) {
       >
         <MediaSection />
         <VolumeSection />
+        {hasBacklight && <BrightnessSection />}
         <NetworkSection />
         <BluetoothSection />
+        {hasBattery && <BatterySection />}
         <SystemSection />
         <TemperatureSection />
         <QuickToggles />

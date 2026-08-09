@@ -325,6 +325,34 @@ window.CalendarPopup {
   }
 }
 
+// バッテリー (バー)
+.Battery {
+  padding: 0 8px;
+  font-size: 12px;
+
+  .battery-icon {
+    color: $fg;
+  }
+
+  .battery-percent {
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 32px;
+
+    &.normal {
+      color: $green;
+    }
+
+    &.warning {
+      color: $yellow;
+    }
+
+    &.critical {
+      color: $red;
+    }
+  }
+}
+
 // パネルトグルボタン
 .PanelToggle {
   background-color: transparent;
@@ -520,6 +548,16 @@ window.StatusPanel {
 .mem-level block.filled {
   background-color: $yellow;
   border-radius: 3px;
+}
+
+.battery-level block.filled {
+  background-color: $green;
+  border-radius: 3px;
+}
+
+// 明るさ。音量スライダーと並ぶので、highlight の色で区別を付ける。
+.brightness-slider highlight {
+  background-color: $yellow;
 }
 
 // メディアプレーヤー
