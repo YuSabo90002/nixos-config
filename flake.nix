@@ -50,8 +50,10 @@
     };
 
     zen-browser = {
+      # 上流が nixos-unstable 前提 (ffmpeg_9 等) なので stable を follows させると
+      # 引数不足で eval に失敗する
       url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     nix-vscode-extensions = {
