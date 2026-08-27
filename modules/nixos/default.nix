@@ -24,12 +24,23 @@ in {
   # Nix設定
   nix = {
     settings = {
-      experimental-features = "nix-command flakes";
+      experimental-features = "nix-command flakes configurable-impure-env";
       flake-registry = "";
       nix-path = config.nix.nixPath;
       extra-substituters = [ "https://cache.numtide.com" ];
       extra-trusted-public-keys = [
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      ];
+
+      # crates.io は User-Agent に "curl" を含むリクエストを 403 で弾く。
+      # nixpkgs の fetchurl は既定で "curl/<ver> Nixpkgs/<ver>" を送るため、
+      # キャッシュに無い crate の取得が軒並み失敗する。builder.sh は
+      # --user-agent の後ろに $NIX_CURL_FLAGS を展開するので UA を上書きできる。
+      # trusted-users が root のみなのでコマンドラインの --option では効かず、
+      # nix.conf 側に置く必要がある。impure-env は空白区切りの name=value 列と
+      # して解釈されるので、値に空白を入れず `--user-agent=` の形で書くこと。
+      impure-env = [
+        "NIX_CURL_FLAGS=--user-agent=Nixpkgs/${config.system.nixos.release}"
       ];
     };
     channel.enable = false;
