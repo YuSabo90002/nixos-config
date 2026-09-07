@@ -87,6 +87,7 @@ in {
   environment.systemPackages = with pkgs; [
     bubblewrap
     socat
+    tcpdump # 要 root (sudo -A tcpdump ...)
     (callPackage ../../packages/claude-code-seccomp {})
     git
     wget

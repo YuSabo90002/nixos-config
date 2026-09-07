@@ -33,8 +33,8 @@ in
 
   networking.hostName = "Yuta-PC";
 
-  # 自宅回線の NTT 網内 IPv6 リーク対策 (詳細は modules/nixos/networking.nix)
-  my.suppressIPv6 = true;
+  # 2026-09-07 に自宅回線の IPv6 が開通したので抑制を解除 (詳細は modules/nixos/networking.nix)。
+  my.suppressIPv6 = false;
 
   # 2 画面 (左 2560x1440 / 右 1920x1080、上揃え)。奇数ワークスペースを左、
   # 偶数を右に割り当てる。
