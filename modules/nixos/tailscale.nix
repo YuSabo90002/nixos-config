@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, ... }: {
   services.tailscale = {
     enable = true;
 
@@ -23,6 +23,28 @@
     # tailscaled をほぼ全面的に操作できる (exit node 変更やログアウトも含む) が、
     # yuta は wheel なので sudo で同じことができ、権限上の実質的な差はない。
     extraSetFlags = [ "--ssh" "--operator=yuta" ];
+  };
+
+  # 起動時は常に切断状態で立ち上げる。tailscaled は WantRunning を state
+  # ファイルに永続化するため、up のまま電源を切ると次回起動で勝手に接続して
+  # しまう。接続は AGS の StatusPanel のトグル (tailscale up) から明示的に行う。
+  # tailscaled 自体は動かしたままにするので、パネルの状態表示 (Stopped) と
+  # トグルはそのまま機能する。
+  systemd.services.tailscale-down-on-boot = {
+    description = "Tailscale を起動時に切断状態にする";
+    after = [ "tailscaled.service" ];
+    requires = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      # active のまま留めておくことで、nixos-rebuild switch のたびに
+      # 「未起動の wanted unit」として再実行されるのを防ぐ (起動時の一度きり)。
+      RemainAfterExit = true;
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale down";
+    };
+    # unit 定義を変えた switch でも再実行しない。実行されるのは boot 時だけ。
+    restartIfChanged = false;
+    stopIfChanged = false;
   };
 
   # tailscale0 は TUN なので networking.nix の Type=ether/wlan にはマッチせず、
