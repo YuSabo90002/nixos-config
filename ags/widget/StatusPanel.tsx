@@ -50,16 +50,18 @@ function VolumeSection() {
 
 // --- 明るさセクション ---
 // バックライトを持たないホスト (外部ディスプレイだけのデスクトップ) では
-// screen が null になるので、セクションごと出さない。
-const backlight = Brightness.get_default()?.screen ?? null
-export const hasBacklight = backlight !== null
+// セクションごと出さない。screen は DeviceProxy で null にはならず、
+// /sys/class/backlight が空だと max_brightness = 0 の DummyDevice を
+// 指しているので、それで判定する。
+const backlight = Brightness.get_default().screen
+export const hasBacklight = backlight.max_brightness > 0
 
 // スライダーを 0 まで引き切ると画面が真っ暗になり、GUI からは戻せなくなる
 // (輝度キーは効くが、それに気付ける状態ではない)。下限を設けて回避する。
 const MIN_BRIGHTNESS = 0.05
 
 function BrightnessSection() {
-  const dev = backlight!
+  const dev = backlight
   // AstalBrightness の brightness は 0..1。生値は realBrightness / maxBrightness。
   const value = createBinding(dev, "brightness")
 
