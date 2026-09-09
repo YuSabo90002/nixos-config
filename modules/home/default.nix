@@ -152,6 +152,31 @@ in {
     Install.WantedBy = [ "default.target" ];
   };
 
+  # Taildrop の受信を常駐化。Linux 版 Tailscale には GUI が無く、届いたファイルは
+  # root 所有の受信箱 (/var/lib/tailscale/files) に溜まったままになるので、
+  # `tailscale file get --loop` で届き次第 ~/Downloads に移す。
+  # tailscaled の socket 経由で動くため modules/nixos/tailscale.nix の
+  # --operator=yuta が前提 (root 不要)。`tailscale down` 中も tailscaled 自体は
+  # 生きているので socket は切れず、そのまま待ち続ける。
+  # 同名衝突は番号付きで別名保存 (送り直しで上書きされないように)。
+  systemd.user.services.taildrop-receive = {
+    Unit = {
+      Description = "Taildrop の受信ファイルを ~/Downloads へ移す";
+      Documentation = "https://tailscale.com/kb/1106/taildrop";
+      After = [ "network.target" ];
+    };
+    Service = {
+      ExecStart = lib.concatStringsSep " " [
+        "${osConfig.services.tailscale.package}/bin/tailscale"
+        "file" "get" "--loop" "--verbose" "--conflict=rename"
+        "%h/Downloads"
+      ];
+      Restart = "always";
+      RestartSec = 10;
+    };
+    Install.WantedBy = [ "default.target" ];
+  };
+
   # PDF/DjVu/PS/コミックビューワ (キーボード駆動、装飾なし)
   # 同梱プラグイン: pdf-mupdf, djvu, ps, cb
   programs.zathura = {
