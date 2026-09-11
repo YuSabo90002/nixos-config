@@ -187,10 +187,21 @@ hl.window_rule({ name = "pear-desktop-ws",    match = { class = "com.github.th-c
 hl.window_rule({ name = "pip-float",          match = { title = "^(Picture-in-Picture)$" },         float = true, pin = true })
 hl.window_rule({ name = "swayimg-float",      match = { class = "^(swayimg)$" },                    float = true })
 
+-- Electron アプリは map 後に activate 要求を出すので、workspace "10 silent" だけでは
+-- misc.focus_on_activate によって結局 ws10 へフォーカスが移ってしまう。
+-- 起動直後の一定時間だけこのルールで activate によるフォーカス移動を抑止し、
+-- その後は通知クリック等で Discord にフォーカスが飛ぶ通常動作に戻す。
+local startupNoFocusOnActivate = hl.window_rule({
+    name  = "startup-no-focus-on-activate",
+    match = { class = "^(discord|com.github.th-ch.youtube-music)$" },
+    focus_on_activate = false,
+})
+
 -------------------
 ---- 自動起動 ----
 -------------------
 hl.on("hyprland.start", function()
     hl.exec_cmd("discord")
     hl.exec_cmd("pear-desktop")
+    hl.timer(function() startupNoFocusOnActivate:set_enabled(false) end, { timeout = 60000, type = "oneshot" })
 end)
