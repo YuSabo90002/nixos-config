@@ -48,6 +48,9 @@ in {
     unstable.discord
     unstable.pear-desktop
     pavucontrol
+    # Windows VM。コンテナランタイムは rootless podman を使う (インストール時に選択)。
+    # podman-compose はパッケージのラッパーが PATH に足すので別途入れなくてよい。
+    unstable.winboat
 
     unstable.gh
     nodejs
