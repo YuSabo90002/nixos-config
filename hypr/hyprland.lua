@@ -181,8 +181,9 @@ hl.window_rule({ name = "dialog-open-folder", match = { title = "^(Open Folder)$
 hl.window_rule({ name = "steam-friends",      match = { title = "^(Friends List)$" },               float = true })
 hl.window_rule({ name = "steam-settings",     match = { title = "^(Steam Settings)$" },             float = true })
 hl.window_rule({ name = "steam-game",         match = { class = "^steam_app_" },                    fullscreen = true })
-hl.window_rule({ name = "discord-ws",         match = { class = "discord" },                        workspace = "10" })
-hl.window_rule({ name = "pear-desktop-ws",    match = { class = "com.github.th-ch.youtube-music" }, workspace = "10" })
+-- "silent" を付けるとウィンドウを ws10 に送るだけでフォーカスは移らない (起動時に ws10 へ飛ばされないように)
+hl.window_rule({ name = "discord-ws",         match = { class = "discord" },                        workspace = "10 silent" })
+hl.window_rule({ name = "pear-desktop-ws",    match = { class = "com.github.th-ch.youtube-music" }, workspace = "10 silent" })
 hl.window_rule({ name = "pip-float",          match = { title = "^(Picture-in-Picture)$" },         float = true, pin = true })
 hl.window_rule({ name = "swayimg-float",      match = { class = "^(swayimg)$" },                    float = true })
 
