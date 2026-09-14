@@ -34,7 +34,9 @@ in {
     ripgrep
     fd
     jq
-    btop
+    # btop の GPU 表示は librocm_smi64 / libnvidia-ml を dlopen で探すが、既定ビルドは
+    # RPATH にどちらも無いので GPU が検出されない。GPU ベンダーに合わせた派生を使う。
+    (if lib.elem "nvidia" osConfig.services.xserver.videoDrivers then btop-cuda else btop-rocm)
     grim
     slurp
     wl-clipboard
