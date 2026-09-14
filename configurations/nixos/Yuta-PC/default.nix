@@ -20,6 +20,7 @@ in
     # このホスト固有
     ./hardware.nix
     ./disko.nix
+    ./comfyui.nix # ローカル画像生成 (RX 9070 XT / ROCm)
     ../../../modules/nixos/hori-wheel.nix # HORI トラックホイール (デスクトップのみ)
   ];
 

@@ -62,12 +62,16 @@ let
     name = "comfyui-rocm-${comfyui.version}";
     paths = [ comfyui ];
     nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
-    # RDNA3/4 の flash attention (aotriton) を有効化。MIOpen の初回チューニングで
-    # VAE デコードが長く止まるのを避ける。どちらも起動前に上書き可。
+    # - RDNA3/4 の flash attention (aotriton) を有効化。MIOpen の初回チューニングで
+    #   VAE デコードが長く止まるのを避ける。どちらも起動前に上書き可。
+    # - DynamicVRAM (comfy-aimdo) は AMD だと ROCm 7.14 以上でしか使われない。それでも
+    #   起動直後に aimdo を初期化しに行き、nixpkgs の torch は版数に "+rocm" が付かないので
+    #   Nvidia 用の実装を読み込んでしまう。どうせ使われないので最初から切っておく。
     postBuild = ''
       wrapProgram $out/bin/comfyui \
         --set-default TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL 1 \
-        --set-default MIOPEN_FIND_MODE FAST
+        --set-default MIOPEN_FIND_MODE FAST \
+        --add-flags --disable-dynamic-vram
     '';
     inherit (comfyui) meta;
   };
