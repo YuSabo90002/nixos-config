@@ -6,6 +6,7 @@ import StatusPanel from "./widget/StatusPanel"
 import CalendarPopup from "./widget/CalendarPopup"
 import NotificationPopups from "./widget/NotificationPopups"
 import Launcher, { toggleLauncher } from "./widget/Launcher"
+import { takeScreenshot } from "./widget/Screenshot"
 import Hyprland from "gi://AstalHyprland"
 import GLib from "gi://GLib"
 
@@ -103,9 +104,14 @@ app.start({
     const mainGdk = findGdkMonitor(MAIN_MONITOR)
     if (mainGdk) Launcher(mainGdk)
   },
-  requestHandler(request: string, respond: (res: string) => void) {
-    if (request.includes("toggle-launcher")) {
+  requestHandler(argv: string[], respond: (res: string) => void) {
+    // `ags request -i yuta-shell screenshot region|output` (hypr/hyprland.lua から呼ぶ)
+    const screenshotMode = argv[argv.indexOf("screenshot") + 1]
+    if (argv.includes("toggle-launcher")) {
       toggleLauncher()
+      respond("ok")
+    } else if (argv.includes("screenshot") && (screenshotMode === "region" || screenshotMode === "output")) {
+      takeScreenshot(screenshotMode, findGdkMonitor)
       respond("ok")
     } else {
       respond("unknown")

@@ -118,9 +118,10 @@ hl.bind(mod .. " + F",             hl.dsp.window.fullscreen())
 hl.bind(mod .. " + D",             hl.dsp.window.pseudo())
 hl.bind(mod .. " + SHIFT + F",     hl.dsp.window.pin())
 
--- スクリーンショット
-hl.bind(mod .. " + S",         hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
-hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("grim - | wl-copy"))
+-- スクリーンショット。撮影後に AGS のポップアップでコピーか保存かを選ぶ (ags/widget/Screenshot.tsx)
+-- region は範囲選択、output はフォーカス中のモニター全体
+hl.bind(mod .. " + S",         hl.dsp.exec_cmd("ags request -i yuta-shell screenshot region"))
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("ags request -i yuta-shell screenshot output"))
 
 -- メディア / 明るさキー
 -- locked = true でロック画面中も効かせる。repeating = true で押しっぱなしに追従。
