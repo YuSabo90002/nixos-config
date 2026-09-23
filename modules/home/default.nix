@@ -78,6 +78,7 @@ in {
     unstable.prismlauncher
 
     nautilus
+    gedit
   ];
 
   programs.ags = {
