@@ -142,7 +142,12 @@ in {
         Name=skk
         Layout=
 
+        # 自作の入力メソッド。DefaultIM は skk のままで、トリガーキーで切り替える
         [Groups/0/Items/1]
+        Name=sekka
+        Layout=
+
+        [Groups/0/Items/2]
         Name=keyboard-us
         Layout=
 

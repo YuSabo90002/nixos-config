@@ -61,6 +61,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # 自作の日本語入力メソッド。canonical は private な sekka-workspace モノレポで、
+    # この2つはそこからのミラー。タグ指定なので nix flake update では動かない。
+    # 上げるときは両方の v0.2.0 を書き換えて overlays/default.nix の version も揃える。
+    # 開発中のツリーを試すときは
+    #   nix run .#activate -- --override-input fcitx5-sekka ~/Documents/sekka-fcitx5/fcitx5-sekka
+    libsekka = {
+      url = "github:YuSabo90002/libsekka/v0.2.0";
+      flake = false;
+    };
+    fcitx5-sekka = {
+      url = "github:YuSabo90002/fcitx5-sekka/v0.2.0";
+      flake = false;
+    };
+
     # グリーター用 (コミットハッシュ固定、nix flake updateで更新されない)
     ags-greeter = {
       url = "github:aylur/ags/bbee2f18939f1ec7ff720e717cf305e73635628f";

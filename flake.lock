@@ -187,6 +187,23 @@
         "type": "github"
       }
     },
+    "fcitx5-sekka": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790470468,
+        "narHash": "sha256-mmUEw7/Lpi0QEx+QfcqNaFh9aYANsMwGbWJf0V9Kgn0=",
+        "owner": "YuSabo90002",
+        "repo": "fcitx5-sekka",
+        "rev": "b980abc4a00a09562d201a1a61548754c6d9aa58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "YuSabo90002",
+        "ref": "v0.2.0",
+        "repo": "fcitx5-sekka",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -326,6 +343,23 @@
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "libsekka": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790470459,
+        "narHash": "sha256-p6unL/Ar7ncR/5dCi/YrGOc1qt6QvG8GWj5/aVlM/t4=",
+        "owner": "YuSabo90002",
+        "repo": "libsekka",
+        "rev": "03d5106977930a5feda0d4f755418b222beac58c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "YuSabo90002",
+        "ref": "v0.2.0",
+        "repo": "libsekka",
         "type": "github"
       }
     },
@@ -509,9 +543,11 @@
         "astal": "astal",
         "astal-greeter": "astal-greeter",
         "disko": "disko",
+        "fcitx5-sekka": "fcitx5-sekka",
         "flake-parts": "flake-parts",
         "herdr": "herdr",
         "home-manager": "home-manager_2",
+        "libsekka": "libsekka",
         "llm-agents": "llm-agents",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-unified": "nixos-unified",

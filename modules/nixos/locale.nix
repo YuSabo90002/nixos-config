@@ -50,6 +50,13 @@
     fcitx5.addons = with pkgs; [
       fcitx5-skk
       fcitx5-gtk
+
+      # 自作の入力メソッド。DictionaryPath は設定せず空のままにしておく:
+      # 空なら StandardPaths で sekka/master-dict.db を探索し、fcitx5-with-addons の
+      # ラッパーが symlinkJoin の share を XDG_DATA_DIRS に足すので sekka-dict が
+      # 見つかる。明示パスを書くと探索へのフォールバックが無効になる。
+      fcitx5-sekka
+      sekka-dict
     ];
   };
 
