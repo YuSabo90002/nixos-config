@@ -190,16 +190,16 @@
     "fcitx5-sekka": {
       "flake": false,
       "locked": {
-        "lastModified": 1790470468,
-        "narHash": "sha256-mmUEw7/Lpi0QEx+QfcqNaFh9aYANsMwGbWJf0V9Kgn0=",
+        "lastModified": 1790509536,
+        "narHash": "sha256-Hfvm5IL7sowC2ujzZIZ5/uL69Yxxj1dY2pjQz1F2NnQ=",
         "owner": "YuSabo90002",
         "repo": "fcitx5-sekka",
-        "rev": "b980abc4a00a09562d201a1a61548754c6d9aa58",
+        "rev": "4ea6fd42e85c8c619ca5c46e98645a52a010a7d0",
         "type": "github"
       },
       "original": {
         "owner": "YuSabo90002",
-        "ref": "v0.2.0",
+        "ref": "v0.3.0",
         "repo": "fcitx5-sekka",
         "type": "github"
       }
@@ -349,16 +349,16 @@
     "libsekka": {
       "flake": false,
       "locked": {
-        "lastModified": 1790470459,
-        "narHash": "sha256-p6unL/Ar7ncR/5dCi/YrGOc1qt6QvG8GWj5/aVlM/t4=",
+        "lastModified": 1790509530,
+        "narHash": "sha256-LVC6epK34qvdUraEUBWBHOatEWieGytz9vNwtIsb4Ng=",
         "owner": "YuSabo90002",
         "repo": "libsekka",
-        "rev": "03d5106977930a5feda0d4f755418b222beac58c",
+        "rev": "c6042caeab65e9e499232e835a12a707c53b9f5d",
         "type": "github"
       },
       "original": {
         "owner": "YuSabo90002",
-        "ref": "v0.2.0",
+        "ref": "v0.3.0",
         "repo": "libsekka",
         "type": "github"
       }

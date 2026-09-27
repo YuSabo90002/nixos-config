@@ -14,12 +14,12 @@
   (final: _prev: {
     libsekka = final.callPackage ../pkgs/libsekka {
       src = inputs.libsekka;
-      version = "0.2.0";
+      version = "0.3.0";
     };
     sekka-dict = final.callPackage ../pkgs/sekka-dict { };
     fcitx5-sekka = final.callPackage ../pkgs/fcitx5-sekka {
       src = inputs.fcitx5-sekka;
-      version = "0.2.0";
+      version = "0.3.0";
     };
   })
 

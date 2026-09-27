@@ -63,15 +63,15 @@
 
     # 自作の日本語入力メソッド。canonical は private な sekka-workspace モノレポで、
     # この2つはそこからのミラー。タグ指定なので nix flake update では動かない。
-    # 上げるときは両方の v0.2.0 を書き換えて overlays/default.nix の version も揃える。
+    # 上げるときは両方のタグを書き換えて overlays/default.nix の version も揃える。
     # 開発中のツリーを試すときは
     #   nix run .#activate -- --override-input fcitx5-sekka ~/Documents/sekka-fcitx5/fcitx5-sekka
     libsekka = {
-      url = "github:YuSabo90002/libsekka/v0.2.0";
+      url = "github:YuSabo90002/libsekka/v0.3.0";
       flake = false;
     };
     fcitx5-sekka = {
-      url = "github:YuSabo90002/fcitx5-sekka/v0.2.0";
+      url = "github:YuSabo90002/fcitx5-sekka/v0.3.0";
       flake = false;
     };
 
