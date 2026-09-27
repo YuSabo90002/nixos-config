@@ -136,15 +136,15 @@ in {
         [Groups/0]
         Name=Default
         Default Layout=us
-        DefaultIM=skk
+        DefaultIM=sekka
 
+        # 自作の入力メソッドを既定にし、skk は切り替え先として残す
         [Groups/0/Items/0]
-        Name=skk
+        Name=sekka
         Layout=
 
-        # 自作の入力メソッド。DefaultIM は skk のままで、トリガーキーで切り替える
         [Groups/0/Items/1]
-        Name=sekka
+        Name=skk
         Layout=
 
         [Groups/0/Items/2]
