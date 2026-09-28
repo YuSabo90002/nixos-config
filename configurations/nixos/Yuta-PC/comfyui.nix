@@ -26,6 +26,7 @@ let
     "comfyui-workflow-templates-json"
     "comfyui-workflow-templates-media-api"
     "comfyui-workflow-templates-media-assets-01"
+    "comfyui-workflow-templates-media-assets-02"
     "comfyui-workflow-templates-media-image"
     "comfyui-workflow-templates-media-other"
     "comfyui-workflow-templates-media-video"
