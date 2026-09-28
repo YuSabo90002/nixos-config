@@ -61,6 +61,7 @@ in {
     unstable.volta
     nmap
     drawio
+    gimp3
     unstable.ouch
 
     (unstable.lutris.override {
