@@ -5,6 +5,7 @@ let
 
   inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system})
     claude-code-seccomp
+    gsd-pi
     ;
 
   # unfree のため autoWire に乗らず pkgs/ 側に置いてある (pkgs/README.md 参照)
@@ -47,6 +48,8 @@ in {
     # Moshi (iOS ターミナル) のホスト側ヘルパー。クライアントが SSH 越しに
     # `command -v moshi-hook` で存在確認するので PATH に居る必要がある。
     moshi-hook
+    # GSD Pi。FHS 環境内で XDG data 配下に npm install して動く (packages/gsd-pi 参照)
+    gsd-pi
     unstable.discord
     unstable.pear-desktop
     pavucontrol
