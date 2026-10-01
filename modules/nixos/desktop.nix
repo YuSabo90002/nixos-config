@@ -117,11 +117,14 @@ in
   # GPU。中身は mesa なので AMD/Intel どちらでもこのまま使える
   # (ベンダ固有なのは hardware.nix 側の microcode と kvm-* モジュール)。
   # enable32Bit は Steam 用。
+  # mesa は stable のままにする。/run/opengl-driver のドライバは全アプリに
+  # dlopen されるので、unstable の mesa (新しい glibc でビルド) にすると
+  # stable 側のアプリ (greeter の Hyprland・kmscon 等) が
+  # 「GLIBC_x.y not found」でドライバを読めず起動できなくなる。
+  # 逆向き (新しい glibc のアプリ + 古い glibc の mesa) は問題ない。
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    package = pkgs.unstable.mesa;
-    package32 = pkgs.unstable.pkgsi686Linux.mesa;
   };
 
   services.pipewire = {
