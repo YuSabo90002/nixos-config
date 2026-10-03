@@ -18,6 +18,7 @@ in {
     ./locale.nix
     ./monitors.nix
     ./networking.nix
+    ./printing.nix
     ./tailscale.nix
   ];
 
