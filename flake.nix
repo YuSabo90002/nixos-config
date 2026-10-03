@@ -67,11 +67,11 @@
     # 開発中のツリーを試すときは
     #   nix run .#activate -- --override-input fcitx5-sekka ~/Documents/sekka-fcitx5/fcitx5-sekka
     libsekka = {
-      url = "github:YuSabo90002/libsekka/v0.4.0";
+      url = "github:YuSabo90002/libsekka/v0.5.0";
       flake = false;
     };
     fcitx5-sekka = {
-      url = "github:YuSabo90002/fcitx5-sekka/v0.4.0";
+      url = "github:YuSabo90002/fcitx5-sekka/v0.5.0";
       flake = false;
     };
 
