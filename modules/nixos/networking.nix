@@ -10,6 +10,10 @@ let
     } else {
       DHCP = "yes";
     };
+
+  # LAN 機器 (プリンタ等) を `<名前>.local` で引けるようにする。resolved 側の
+  # 全体設定と networkd 側のリンク単位設定の両方が yes でないと有効にならない。
+  linkConfig = v6 // { MulticastDNS = true; };
 in
 {
   options.my.suppressIPv6 = lib.mkOption {
@@ -34,13 +38,13 @@ in
 
     systemd.network.networks."20-wired" = {
       matchConfig.Type = "ether";
-      networkConfig = v6;
+      networkConfig = linkConfig;
       dhcpV4Config.RouteMetric = 100;
     };
 
     systemd.network.networks."25-wireless" = {
       matchConfig.Type = "wlan";
-      networkConfig = v6;
+      networkConfig = linkConfig;
       dhcpV4Config.RouteMetric = 600;
     };
 
@@ -57,7 +61,14 @@ in
       };
     };
 
-    services.resolved.enable = true;
+    services.resolved = {
+      enable = true;
+      settings.Resolve.MulticastDNS = true;
+    };
+
+    # mDNS の応答はマルチキャストで返ってくるため conntrack で ESTABLISHED 扱いに
+    # ならず、5353 を開けないと問い合わせても応答が捨てられる。
+    networking.firewall.allowedUDPPorts = [ 5353 ];
 
     networking.firewall.allowedTCPPorts = [ 1420 1421 ];
   };
