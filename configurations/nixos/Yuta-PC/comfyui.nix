@@ -54,9 +54,9 @@ let
   );
 
   comfyui = rocmPkgs.callPackage "${unstableSrc}/pkgs/by-name/co/comfyui/package.nix" {
-    # package.nix が torch/triton を cudaPackages_13 で override する。ROCm では未使用だが
-    # 別の値を渡すと drv が変わって cache を外すので、torch 自身が持つものを渡し直す。
-    cudaPackages_13 = rocmPkgs.python3Packages.torch.cudaPackages;
+    # package.nix は meta.broken = cudaPackages.cudaOlder "13" でしか cudaPackages を見ない。
+    # stable の既定は 12 系で broken 扱いになるので 13 を渡す (drv には影響しない)。
+    cudaPackages = rocmPkgs.cudaPackages_13;
   };
 
   comfyuiWrapped = pkgs.symlinkJoin {
