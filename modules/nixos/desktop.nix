@@ -50,6 +50,25 @@ in
     portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
   };
 
+  # uwsm のセッションユニットは ExecStart に util-linux / uwsm の store path を
+  # 埋め込むため、それらが rebuild されると switch が「変更あり」として停止する。
+  # bindpid の停止は OnSuccess=wayland-session-shutdown.target (replace-irreversibly)
+  # でセッション全体を落とし、巻き込まれた switch-to-configuration が exit 101 で死んで
+  # iwd 等が止まったまま残る。セッション中は再起動させず、次回ログインで反映させる。
+  systemd.user.units = lib.genAttrs [
+    "wayland-wm@.service"
+    "wayland-wm-env@.service"
+    "wayland-session-bindpid@.service"
+    "wayland-wm-app-daemon.service"
+    "wayland-session-waitenv.service"
+  ] (_: {
+    overrideStrategy = "asDropin";
+    text = ''
+      [Service]
+      X-RestartIfChanged=false
+    '';
+  });
+
   # Electron/Chromium アプリ (Discord・VSCode 等) を Wayland(ozone) で起動させる。
   # XWayland 起動だと画面共有が xdg-desktop-portal を呼ばず、Discord の
   # ウィンドウ共有ダイアログ (xdph ピッカー) が出なくなるため必須。
