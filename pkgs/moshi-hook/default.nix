@@ -12,12 +12,12 @@
 # 配布される。static link の Go バイナリなので autoPatchelfHook は不要。
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "moshi-hook";
-  version = "0.4.6";
+  version = "0.4.45";
 
   src = fetchurl {
     url = "https://cdn.getmoshi.app/hook/v${finalAttrs.version}/moshi-hook_Linux_x86_64.tar.gz";
     # Homebrew tap (rjyo/homebrew-moshi) の Formula と同じ sha256
-    hash = "sha256-h4NwoAnDgYhO5QW1Quy/Ig4WXDQxwGGvjKAlLswNG0g=";
+    hash = "sha256-I+a/BcxXWl41+Rd6EzbmtC3+n6VtFLQV5FU57i+wOfU=";
   };
 
   # tar のトップレベルにディレクトリが無く moshi-hook / README.md / docs が直接入っている

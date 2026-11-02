@@ -78,8 +78,15 @@ in {
     # 既定だとベース 26.05 の xdph に unstable の hyprland を注入した派生
     # (finalPortalPackage = portalPackage.override { hyprland = finalPackage; })
     # になりキャッシュに存在せず毎回ローカルビルド + NixOS 側の 1.4.0 と二重に入る。
-    # unstable を明示すると override が既定引数と同一になり NixOS 側と同じ派生に収束する。
-    portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
+    # unstable を明示すると NixOS 側と同じ派生に収束する。
+    # unstable の xdph は引数 hyprland を廃止したが、release-26.05 の home-manager は
+    # 依然 override { hyprland = ...; } を呼んで評価エラーになる (finalPortalPackage は readOnly)。
+    # override を素通しに差し替えて unstable の派生をそのまま使わせる。
+    portalPackage =
+      pkgs.unstable.xdg-desktop-portal-hyprland
+      // {
+        override = _: pkgs.unstable.xdg-desktop-portal-hyprland;
+      };
     systemd.enable = false; # UWSMが管理するため無効化
     settings = { }; # 構造化設定は使わない（中身は hyprland.lua へ）
     # 実 Lua ファイルを取り込む。extraConfig!="" により module が hyprland.lua を生成し

@@ -3,7 +3,12 @@
   (final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
       system = final.stdenv.hostPlatform.system;
-      config.allowUnfree = true;
+      config = {
+        allowUnfree = true;
+        # unstable で gtk2 が broken 扱いになったが、lutris の FHS 環境が依然 gtk2 を
+        # 取り込むため評価が止まる。lutris 側が gtk2 を外したら削除する。
+        problems.handlers."gtk+".broken = "warn";
+      };
     };
   })
 
