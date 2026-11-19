@@ -66,6 +66,7 @@ in {
     drawio
     gimp3
     unstable.ouch
+    vlc
 
     (unstable.lutris.override {
       extraPkgs = p: with p; [
